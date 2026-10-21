@@ -5,7 +5,7 @@ const runtimeTarget = `http://127.0.0.1:${process.env['ACTWRIGHT_RUNTIME_PORT'] 
 
 export default defineConfig({
   root: 'frontend',
-  base: process.env.GITHUB_ACTIONS ? '/Actwright/' : '/',
+  base: '/',
   optimizeDeps: {
     include: [
       'blockly/core',
