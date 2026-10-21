@@ -1,0 +1,5731 @@
+{
+  "schemaVersion": 1,
+  "provider": "silicon",
+  "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb",
+  "sources": {
+    "silicon/__init__.py": "9fbcf1ed180739a1ec458a240446b1990548015d",
+    "silicon/components.py": "f3ef030734a6bdc81e8cf6536c605ebbf8ca39ff",
+    "silicon/integrations.py": "e8a305ca3c935f961eeb35789a04bd8264b9487d",
+    "silicon/syntax.py": "495049e5334255a274a077472c907695ddeb11f2",
+    "silicon/utils.py": "ad5bcd062a0e5de6901d749964624cce984ec49a"
+  },
+  "root": {
+    "name": "Game",
+    "module": "silicon",
+    "parameters": [
+      {
+        "name": "name",
+        "annotation": null,
+        "kind": "positionalOrKeyword",
+        "default": {
+          "kind": "literal",
+          "value": "Game"
+        }
+      },
+      {
+        "name": "seed",
+        "annotation": null,
+        "kind": "positionalOrKeyword",
+        "default": {
+          "kind": "literal",
+          "value": null
+        }
+      },
+      {
+        "name": "tick_rate",
+        "annotation": null,
+        "kind": "keywordOnly",
+        "default": {
+          "kind": "literal",
+          "value": 60
+        }
+      }
+    ],
+    "triggers": [
+      "start",
+      "pause",
+      "resume",
+      "stop"
+    ],
+    "asyncRun": true
+  },
+  "definitions": [
+    {
+      "id": "silicon.App",
+      "version": 1,
+      "provider": "silicon",
+      "name": "App",
+      "module": "silicon",
+      "kind": "component",
+      "description": "Blocking Sulfur window. Pages and native windows never enter game saves.",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.App.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "frontend_id",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": "frontend"
+              }
+            },
+            {
+              "name": "window_options",
+              "annotation": null,
+              "kind": "varKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 26
+        },
+        {
+          "id": "silicon.App.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 32
+        },
+        {
+          "id": "silicon.App.open",
+          "name": "open",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "dev",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": false
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 36
+        },
+        {
+          "id": "silicon.App.close",
+          "name": "close",
+          "kind": "input",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 53
+        },
+        {
+          "id": "silicon.App.opened",
+          "name": "opened",
+          "kind": "output",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 58
+        },
+        {
+          "id": "silicon.App.closed",
+          "name": "closed",
+          "kind": "output",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 61
+        }
+      ],
+      "state": [],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "frontend_id",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": "frontend"
+            }
+          },
+          {
+            "name": "window_options",
+            "annotation": null,
+            "kind": "varKeyword",
+            "default": {
+              "kind": "missing"
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/integrations.py",
+        "line": 24,
+        "endLine": 61,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Integrations",
+      "optionalDependencies": [
+        "sulfur",
+        "fluorine"
+      ],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.CharacterSelection",
+      "version": 1,
+      "provider": "silicon",
+      "name": "CharacterSelection",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.CharacterSelection.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "choices",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 963
+        },
+        {
+          "id": "silicon.CharacterSelection.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 966
+        },
+        {
+          "id": "silicon.CharacterSelection.select",
+          "name": "select",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "player",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "character",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 968
+        },
+        {
+          "id": "silicon.CharacterSelection.selected",
+          "name": "selected",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "player",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "character",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 973
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.CharacterSelection.selections",
+          "name": "selections",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": {}
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "choices",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": null
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/__init__.py",
+        "line": 961,
+        "endLine": 973,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Entities",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Collision2D",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Collision2D",
+      "module": "silicon",
+      "kind": "component",
+      "description": "AABB overlap events (detection only); touching edges do not overlap.",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Collision2D.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "transform_id",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": "transform"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 187
+        },
+        {
+          "id": "silicon.Collision2D.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 191
+        },
+        {
+          "id": "silicon.Collision2D.add",
+          "name": "add",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "width",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": 1
+              }
+            },
+            {
+              "name": "height",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": 1
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 194
+        },
+        {
+          "id": "silicon.Collision2D.remove",
+          "name": "remove",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 201
+        },
+        {
+          "id": "silicon.Collision2D.check",
+          "name": "check",
+          "kind": "update",
+          "parameters": [
+            {
+              "name": "dt",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "update()"
+          ],
+          "async": false,
+          "description": "",
+          "line": 205,
+          "rate": {
+            "kind": "literal",
+            "value": 0
+          }
+        },
+        {
+          "id": "silicon.Collision2D.entered",
+          "name": "entered",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "first",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "second",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 227
+        },
+        {
+          "id": "silicon.Collision2D.exited",
+          "name": "exited",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "first",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "second",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 230
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.Collision2D.sizes",
+          "name": "sizes",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": {}
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        },
+        {
+          "id": "silicon.Collision2D.contacts",
+          "name": "contacts",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": []
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "transform_id",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": "transform"
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/components.py",
+        "line": 182,
+        "endLine": 230,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Physics",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.CommandOptions",
+      "version": 1,
+      "provider": "silicon",
+      "name": "CommandOptions",
+      "module": "silicon",
+      "kind": "component",
+      "description": "Snapshot argv without the executable and query options without a schema.\n\nOptions accept --name=value or --name value. Bare options return True;\ndeclare known boolean flags to keep them from consuming a positional value.\nRepeated options use the last occurrence, including across queried aliases.\nA standalone -- ends option parsing. Values remain strings.",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.CommandOptions.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "argv",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            },
+            {
+              "name": "flags",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 359
+        },
+        {
+          "id": "silicon.CommandOptions._is_option",
+          "name": "_is_option",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "token",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "staticmethod"
+          ],
+          "async": false,
+          "description": "",
+          "line": 398
+        },
+        {
+          "id": "silicon.CommandOptions.positionals",
+          "name": "positionals",
+          "kind": "property",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "property"
+          ],
+          "async": false,
+          "description": "Return positional arguments in order, excluding option values.",
+          "line": 408
+        },
+        {
+          "id": "silicon.CommandOptions.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 412
+        },
+        {
+          "id": "silicon.CommandOptions.get",
+          "name": "get",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "names",
+              "annotation": null,
+              "kind": "varPositional",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "default",
+              "annotation": null,
+              "kind": "keywordOnly",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "Query aliases, or a single positional index (negative indexes work).",
+          "line": 416
+        }
+      ],
+      "state": [],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "argv",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": null
+            }
+          },
+          {
+            "name": "flags",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": null
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/components.py",
+        "line": 351,
+        "endLine": 429,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Integrations",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Effect",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Effect",
+      "module": "silicon",
+      "kind": "component",
+      "description": "A nested, turn-based effect. Connect proc to implement its game rules.",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Effect.__component__",
+          "name": "__component__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "name",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "value",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": 1
+              }
+            },
+            {
+              "name": "turns",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": 1
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 793
+        },
+        {
+          "id": "silicon.Effect.on_attach",
+          "name": "on_attach",
+          "kind": "lifecycle",
+          "parameters": [
+            {
+              "name": "game",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 798
+        },
+        {
+          "id": "silicon.Effect.proc",
+          "name": "proc",
+          "kind": "trigger",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "trigger"
+          ],
+          "async": false,
+          "description": "",
+          "line": 802
+        },
+        {
+          "id": "silicon.Effect.reduce_remaining_turns",
+          "name": "reduce_remaining_turns",
+          "kind": "trigger",
+          "parameters": [
+            {
+              "name": "amount",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": 1
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "trigger"
+          ],
+          "async": false,
+          "description": "",
+          "line": 806
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.Effect.remaining_turns",
+          "name": "remaining_turns",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": 0
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__component__",
+        "parameters": [
+          {
+            "name": "name",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "missing"
+            }
+          },
+          {
+            "name": "value",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": 1
+            }
+          },
+          {
+            "name": "turns",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": 1
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": false,
+        "fromConfig": false,
+        "status": "basePattern"
+      },
+      "provenance": {
+        "path": "silicon/__init__.py",
+        "line": 789,
+        "endLine": 811,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Entities",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Effects",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Effects",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Effects.apply",
+          "name": "apply",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "name",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "duration",
+              "annotation": "float",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 943
+        },
+        {
+          "id": "silicon.Effects.advance",
+          "name": "advance",
+          "kind": "input",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 947
+        },
+        {
+          "id": "silicon.Effects._update",
+          "name": "_update",
+          "kind": "update",
+          "parameters": [
+            {
+              "name": "dt",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "update()"
+          ],
+          "async": false,
+          "description": "",
+          "line": 949,
+          "rate": {
+            "kind": "literal",
+            "value": 0
+          }
+        },
+        {
+          "id": "silicon.Effects._advance",
+          "name": "_advance",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "dt",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 950
+        },
+        {
+          "id": "silicon.Effects.applied",
+          "name": "applied",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "name",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 956
+        },
+        {
+          "id": "silicon.Effects.expired",
+          "name": "expired",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "name",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 958
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.Effects.effects",
+          "name": "effects",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": {}
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__component__",
+        "parameters": []
+      },
+      "serialization": {
+        "toConfig": false,
+        "fromConfig": false,
+        "status": "basePattern"
+      },
+      "provenance": {
+        "path": "silicon/__init__.py",
+        "line": 940,
+        "endLine": 958,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Entities",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Entity",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Entity",
+      "module": "silicon",
+      "kind": "component",
+      "description": "A named container with a spawn trigger; game rules choose its behavior.",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Entity.__component__",
+          "name": "__component__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "name",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": "Entity"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 780
+        },
+        {
+          "id": "silicon.Entity.spawn",
+          "name": "spawn",
+          "kind": "trigger",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "trigger"
+          ],
+          "async": false,
+          "description": "",
+          "line": 784
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.Entity.spawned",
+          "name": "spawned",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": false
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__component__",
+        "parameters": [
+          {
+            "name": "name",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": "Entity"
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": false,
+        "fromConfig": false,
+        "status": "basePattern"
+      },
+      "provenance": {
+        "path": "silicon/__init__.py",
+        "line": 776,
+        "endLine": 785,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Entities",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.FrontEnd",
+      "version": 1,
+      "provider": "silicon",
+      "name": "FrontEnd",
+      "module": "silicon",
+      "kind": "component",
+      "description": "Optional front-end with Wednesware Fluorine; no rendering or web server included.\n\nPage/Site instances are external runtime objects and intentionally are not\nserialized. Attach them again after loading a saved game.",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.FrontEnd.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "site",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 897
+        },
+        {
+          "id": "silicon.FrontEnd.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 900
+        },
+        {
+          "id": "silicon.FrontEnd.attach",
+          "name": "attach",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "site",
+              "annotation": "object",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 902
+        },
+        {
+          "id": "silicon.FrontEnd.select",
+          "name": "select",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "name",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 906
+        },
+        {
+          "id": "silicon.FrontEnd.page",
+          "name": "page",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "game",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 916
+        },
+        {
+          "id": "silicon.FrontEnd.attached",
+          "name": "attached",
+          "kind": "output",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 925
+        },
+        {
+          "id": "silicon.FrontEnd.selected",
+          "name": "selected",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "name",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 927
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.FrontEnd.selected_page",
+          "name": "selected_page",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": ""
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "site",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": null
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/__init__.py",
+        "line": 890,
+        "endLine": 927,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Integrations",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.GameControl",
+      "version": 1,
+      "provider": "silicon",
+      "name": "GameControl",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.GameControl.stop",
+          "name": "stop",
+          "kind": "input",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 1002
+        },
+        {
+          "id": "silicon.GameControl.pause",
+          "name": "pause",
+          "kind": "input",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 1004
+        },
+        {
+          "id": "silicon.GameControl.resume",
+          "name": "resume",
+          "kind": "input",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 1006
+        }
+      ],
+      "state": [],
+      "constructor": {
+        "strategy": "__component__",
+        "parameters": []
+      },
+      "serialization": {
+        "toConfig": false,
+        "fromConfig": false,
+        "status": "basePattern"
+      },
+      "provenance": {
+        "path": "silicon/__init__.py",
+        "line": 1000,
+        "endLine": 1006,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Flow",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Gravity",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Gravity",
+      "module": "silicon",
+      "kind": "component",
+      "description": "Add before Velocity for semi-implicit Euler integration; positive y is down.",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Gravity.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "acceleration",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": 9.8
+              }
+            },
+            {
+              "name": "velocity_id",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": "velocity"
+              }
+            },
+            {
+              "name": "terminal_speed",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 78
+        },
+        {
+          "id": "silicon.Gravity.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 86
+        },
+        {
+          "id": "silicon.Gravity.add",
+          "name": "add",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 91
+        },
+        {
+          "id": "silicon.Gravity.remove",
+          "name": "remove",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 96
+        },
+        {
+          "id": "silicon.Gravity.advance",
+          "name": "advance",
+          "kind": "update",
+          "parameters": [
+            {
+              "name": "dt",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "update()"
+          ],
+          "async": false,
+          "description": "",
+          "line": 100,
+          "rate": {
+            "kind": "literal",
+            "value": 0
+          }
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.Gravity.entities",
+          "name": "entities",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": []
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "acceleration",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": 9.8
+            }
+          },
+          {
+            "name": "velocity_id",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": "velocity"
+            }
+          },
+          {
+            "name": "terminal_speed",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": null
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/components.py",
+        "line": 74,
+        "endLine": 107,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Physics",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.GridMovement",
+      "version": 1,
+      "provider": "silicon",
+      "name": "GridMovement",
+      "module": "silicon",
+      "kind": "component",
+      "description": "Move a selected Stage2D entity; walls and occupied solid cells block movement.",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.GridMovement.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": "hero"
+              }
+            },
+            {
+              "name": "stage_id",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": "stage"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 140
+        },
+        {
+          "id": "silicon.GridMovement.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 144
+        },
+        {
+          "id": "silicon.GridMovement.command",
+          "name": "command",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "direction",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 147
+        },
+        {
+          "id": "silicon.GridMovement.move",
+          "name": "move",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "dx",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "dy",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 154
+        },
+        {
+          "id": "silicon.GridMovement.solid",
+          "name": "solid",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 170
+        },
+        {
+          "id": "silicon.GridMovement.moved",
+          "name": "moved",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "x",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "y",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 175
+        },
+        {
+          "id": "silicon.GridMovement.blocked",
+          "name": "blocked",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "x",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "y",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 178
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.GridMovement.solids",
+          "name": "solids",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": []
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "entity",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": "hero"
+            }
+          },
+          {
+            "name": "stage_id",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": "stage"
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/components.py",
+        "line": 136,
+        "endLine": 178,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Grid",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Health",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Health",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Health.add",
+          "name": "add",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "maximum",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": 3
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 239
+        },
+        {
+          "id": "silicon.Health.damage",
+          "name": "damage",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "amount",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": 1
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 248
+        },
+        {
+          "id": "silicon.Health.heal",
+          "name": "heal",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "amount",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": 1
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 260
+        },
+        {
+          "id": "silicon.Health.changed",
+          "name": "changed",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "value",
+              "annotation": "float",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 269
+        },
+        {
+          "id": "silicon.Health.died",
+          "name": "died",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 272
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.Health.values",
+          "name": "values",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": {}
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        },
+        {
+          "id": "silicon.Health.maximums",
+          "name": "maximums",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": {}
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__component__",
+        "parameters": []
+      },
+      "serialization": {
+        "toConfig": false,
+        "fromConfig": false,
+        "status": "basePattern"
+      },
+      "provenance": {
+        "path": "silicon/components.py",
+        "line": 234,
+        "endLine": 272,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Gameplay",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.InputMap",
+      "version": 1,
+      "provider": "silicon",
+      "name": "InputMap",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.InputMap.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "bindings",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 112
+        },
+        {
+          "id": "silicon.InputMap.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 118
+        },
+        {
+          "id": "silicon.InputMap.feed",
+          "name": "feed",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "key",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 121
+        },
+        {
+          "id": "silicon.InputMap.action",
+          "name": "action",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "name",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 129
+        },
+        {
+          "id": "silicon.InputMap.unknown",
+          "name": "unknown",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "key",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 132
+        }
+      ],
+      "state": [],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "bindings",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": null
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/components.py",
+        "line": 111,
+        "endLine": 132,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Grid",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Inventory",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Inventory",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Inventory.add",
+          "name": "add",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "item",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "count",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": 1
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 280
+        },
+        {
+          "id": "silicon.Inventory.take",
+          "name": "take",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "item",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "count",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": 1
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 287
+        },
+        {
+          "id": "silicon.Inventory.changed",
+          "name": "changed",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "item",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "count",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 299
+        },
+        {
+          "id": "silicon.Inventory.missing",
+          "name": "missing",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "item",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 302
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.Inventory.items",
+          "name": "items",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": {}
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__component__",
+        "parameters": []
+      },
+      "serialization": {
+        "toConfig": false,
+        "fromConfig": false,
+        "status": "basePattern"
+      },
+      "provenance": {
+        "path": "silicon/components.py",
+        "line": 276,
+        "endLine": 302,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Gameplay",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Lifetime",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Lifetime",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Lifetime.add",
+          "name": "add",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "seconds",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 328
+        },
+        {
+          "id": "silicon.Lifetime.remove",
+          "name": "remove",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 335
+        },
+        {
+          "id": "silicon.Lifetime.advance",
+          "name": "advance",
+          "kind": "update",
+          "parameters": [
+            {
+              "name": "dt",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "update()"
+          ],
+          "async": false,
+          "description": "",
+          "line": 339,
+          "rate": {
+            "kind": "literal",
+            "value": 0
+          }
+        },
+        {
+          "id": "silicon.Lifetime.expired",
+          "name": "expired",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 347
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.Lifetime.remaining",
+          "name": "remaining",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": {}
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__component__",
+        "parameters": []
+      },
+      "serialization": {
+        "toConfig": false,
+        "fromConfig": false,
+        "status": "basePattern"
+      },
+      "provenance": {
+        "path": "silicon/components.py",
+        "line": 324,
+        "endLine": 347,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Physics",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Multiplayer",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Multiplayer",
+      "module": "silicon",
+      "kind": "component",
+      "description": "One authoritative Session shared by all Beryllium clients.\n\nbind(session, page) returns a runtime binding. Call binding.run() to host.\nStartup URLs are printed by default; set print_url=False to disable them.\nPage callbacks should be @Session.action methods. The binding survives game\nreplacement; hosts, clients and subscriptions are deliberately not serialized.",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Multiplayer.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "port",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": 8000
+              }
+            },
+            {
+              "name": "host",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": "0.0.0.0"
+              }
+            },
+            {
+              "name": "max_clients",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            },
+            {
+              "name": "print_url",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": true
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 230
+        },
+        {
+          "id": "silicon.Multiplayer.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 235
+        },
+        {
+          "id": "silicon.Multiplayer.bind",
+          "name": "bind",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "session",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "page",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            },
+            {
+              "name": "host",
+              "annotation": null,
+              "kind": "keywordOnly",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 239
+        },
+        {
+          "id": "silicon.Multiplayer.connected",
+          "name": "connected",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "player",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 243
+        },
+        {
+          "id": "silicon.Multiplayer.disconnected",
+          "name": "disconnected",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "player",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 246
+        },
+        {
+          "id": "silicon.Multiplayer.command",
+          "name": "command",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "player",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "name",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 249
+        }
+      ],
+      "state": [],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "port",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": 8000
+            }
+          },
+          {
+            "name": "host",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": "0.0.0.0"
+            }
+          },
+          {
+            "name": "max_clients",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": null
+            }
+          },
+          {
+            "name": "print_url",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": true
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/integrations.py",
+        "line": 222,
+        "endLine": 249,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Integrations",
+      "optionalDependencies": [
+        "beryllium",
+        "fluorine"
+      ],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Randomizer",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Randomizer",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Randomizer.roll",
+          "name": "roll",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "sides",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 978
+        },
+        {
+          "id": "silicon.Randomizer.rolled",
+          "name": "rolled",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "value",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 982
+        }
+      ],
+      "state": [],
+      "constructor": {
+        "strategy": "__component__",
+        "parameters": []
+      },
+      "serialization": {
+        "toConfig": false,
+        "fromConfig": false,
+        "status": "basePattern"
+      },
+      "provenance": {
+        "path": "silicon/__init__.py",
+        "line": 976,
+        "endLine": 982,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Gameplay",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Score",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Score",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Score.add",
+          "name": "add",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "amount",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": 1
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 310
+        },
+        {
+          "id": "silicon.Score.reset",
+          "name": "reset",
+          "kind": "input",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 315
+        },
+        {
+          "id": "silicon.Score.changed",
+          "name": "changed",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "value",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 320
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.Score.value",
+          "name": "value",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": 0
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__component__",
+        "parameters": []
+      },
+      "serialization": {
+        "toConfig": false,
+        "fromConfig": false,
+        "status": "basePattern"
+      },
+      "provenance": {
+        "path": "silicon/components.py",
+        "line": 306,
+        "endLine": 320,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Gameplay",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.ShellInput",
+      "version": 1,
+      "provider": "silicon",
+      "name": "ShellInput",
+      "module": "silicon",
+      "kind": "component",
+      "description": "Explicit blocking prompts; feed() also supports scripted input without a TTY.",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.ShellInput.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "prompt",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": "> "
+              }
+            },
+            {
+              "name": "options",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            },
+            {
+              "name": "iodine",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": false
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 159
+        },
+        {
+          "id": "silicon.ShellInput.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 165
+        },
+        {
+          "id": "silicon.ShellInput.feed",
+          "name": "feed",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "value",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 169
+        },
+        {
+          "id": "silicon.ShellInput.read",
+          "name": "read",
+          "kind": "input",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 177
+        },
+        {
+          "id": "silicon.ShellInput.submitted",
+          "name": "submitted",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "value",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 196
+        },
+        {
+          "id": "silicon.ShellInput.invalid",
+          "name": "invalid",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "value",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 199
+        },
+        {
+          "id": "silicon.ShellInput.cancelled",
+          "name": "cancelled",
+          "kind": "output",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 202
+        }
+      ],
+      "state": [],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "prompt",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": "> "
+            }
+          },
+          {
+            "name": "options",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": null
+            }
+          },
+          {
+            "name": "iodine",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": false
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/integrations.py",
+        "line": 157,
+        "endLine": 202,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [
+        "Iodine is optional when iodine=True; read() is blocking."
+      ],
+      "category": "Integrations",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.SoundEffects",
+      "version": 1,
+      "provider": "silicon",
+      "name": "SoundEffects",
+      "module": "silicon",
+      "kind": "component",
+      "description": "Named, nonblocking Carbon WAV effects; stop only this adapter's sounds.",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.SoundEffects.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "sounds",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            },
+            {
+              "name": "prevent_overlap",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": true
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 121
+        },
+        {
+          "id": "silicon.SoundEffects.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 127
+        },
+        {
+          "id": "silicon.SoundEffects.play",
+          "name": "play",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "name",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 131
+        },
+        {
+          "id": "silicon.SoundEffects.stop",
+          "name": "stop",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "name",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 138
+        },
+        {
+          "id": "silicon.SoundEffects.on_stop",
+          "name": "on_stop",
+          "kind": "lifecycle",
+          "parameters": [
+            {
+              "name": "game",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 143
+        },
+        {
+          "id": "silicon.SoundEffects.on_detach",
+          "name": "on_detach",
+          "kind": "lifecycle",
+          "parameters": [
+            {
+              "name": "game",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 150
+        },
+        {
+          "id": "silicon.SoundEffects.played",
+          "name": "played",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "name",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 153
+        }
+      ],
+      "state": [],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "sounds",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": null
+            }
+          },
+          {
+            "name": "prevent_overlap",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": true
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/integrations.py",
+        "line": 119,
+        "endLine": 153,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Integrations",
+      "optionalDependencies": [
+        "carbon"
+      ],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.SoundPlayer",
+      "version": 1,
+      "provider": "silicon",
+      "name": "SoundPlayer",
+      "module": "silicon",
+      "kind": "component",
+      "description": "Nonblocking Carbon WAV playback by path; playback is runtime only.",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.SoundPlayer.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "prevent_overlap",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": true
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 67
+        },
+        {
+          "id": "silicon.SoundPlayer.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 72
+        },
+        {
+          "id": "silicon.SoundPlayer.play",
+          "name": "play",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "path",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "Request playback of a WAV filename or pathlib.Path.",
+          "line": 76
+        },
+        {
+          "id": "silicon.SoundPlayer.stop",
+          "name": "stop",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "path",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "Stop a path requested by this player in the active game.",
+          "line": 84
+        },
+        {
+          "id": "silicon.SoundPlayer.stop_all",
+          "name": "stop_all",
+          "kind": "input",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "Stop this game's requested paths without calling Carbon's stop_all.",
+          "line": 94
+        },
+        {
+          "id": "silicon.SoundPlayer.on_stop",
+          "name": "on_stop",
+          "kind": "lifecycle",
+          "parameters": [
+            {
+              "name": "game",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 99
+        },
+        {
+          "id": "silicon.SoundPlayer.on_detach",
+          "name": "on_detach",
+          "kind": "lifecycle",
+          "parameters": [
+            {
+              "name": "game",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 108
+        },
+        {
+          "id": "silicon.SoundPlayer.played",
+          "name": "played",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "path",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 112
+        },
+        {
+          "id": "silicon.SoundPlayer.stopped",
+          "name": "stopped",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "path",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 115
+        }
+      ],
+      "state": [],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "prevent_overlap",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": true
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/integrations.py",
+        "line": 65,
+        "endLine": 115,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Integrations",
+      "optionalDependencies": [
+        "carbon"
+      ],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Stage2D",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Stage2D",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Stage2D.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "width",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "height",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 743
+        },
+        {
+          "id": "silicon.Stage2D.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 747
+        },
+        {
+          "id": "silicon.Stage2D._check",
+          "name": "_check",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "x",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "y",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 748
+        },
+        {
+          "id": "silicon.Stage2D.place",
+          "name": "place",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "x",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "y",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 751
+        },
+        {
+          "id": "silicon.Stage2D.move",
+          "name": "move",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "x",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "y",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 756
+        },
+        {
+          "id": "silicon.Stage2D.remove",
+          "name": "remove",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 762
+        },
+        {
+          "id": "silicon.Stage2D.placed",
+          "name": "placed",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "x",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "y",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 769
+        },
+        {
+          "id": "silicon.Stage2D.moved",
+          "name": "moved",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "x",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "y",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 771
+        },
+        {
+          "id": "silicon.Stage2D.removed",
+          "name": "removed",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 773
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.Stage2D.cells",
+          "name": "cells",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": {}
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "width",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "missing"
+            }
+          },
+          {
+            "name": "height",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "missing"
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/__init__.py",
+        "line": 741,
+        "endLine": 773,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Grid",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.StageRenderer",
+      "version": 1,
+      "provider": "silicon",
+      "name": "StageRenderer",
+      "module": "silicon",
+      "kind": "component",
+      "description": "Character-cell terminal renderer for a Stage2D, without owning the stage.\n\nConnect stage.out.placed/moved/removed to matching renderer inputs.\nRendering is explicit via render() or the draw input, making it usable in\nboth turn-based and real-time games without unsolicited terminal output.",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.StageRenderer.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "stage_id",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": "stage"
+              }
+            },
+            {
+              "name": "empty",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": "."
+              }
+            },
+            {
+              "name": "border",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": true
+              }
+            },
+            {
+              "name": "clear",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": false
+              }
+            },
+            {
+              "name": "ansi",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": false
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 824
+        },
+        {
+          "id": "silicon.StageRenderer.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 832
+        },
+        {
+          "id": "silicon.StageRenderer._stage",
+          "name": "_stage",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 834
+        },
+        {
+          "id": "silicon.StageRenderer.set_glyph",
+          "name": "set_glyph",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "glyph",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 841
+        },
+        {
+          "id": "silicon.StageRenderer.hide",
+          "name": "hide",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 846
+        },
+        {
+          "id": "silicon.StageRenderer.show",
+          "name": "show",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 850
+        },
+        {
+          "id": "silicon.StageRenderer.placed",
+          "name": "placed",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "x",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "y",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 854
+        },
+        {
+          "id": "silicon.StageRenderer.moved",
+          "name": "moved",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "x",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "y",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 856
+        },
+        {
+          "id": "silicon.StageRenderer.removed",
+          "name": "removed",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 858
+        },
+        {
+          "id": "silicon.StageRenderer.frame",
+          "name": "frame",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "game",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 859
+        },
+        {
+          "id": "silicon.StageRenderer.draw",
+          "name": "draw",
+          "kind": "input",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 879
+        },
+        {
+          "id": "silicon.StageRenderer.changed",
+          "name": "changed",
+          "kind": "output",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 885
+        },
+        {
+          "id": "silicon.StageRenderer.rendered",
+          "name": "rendered",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "frame",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 887
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.StageRenderer.glyphs",
+          "name": "glyphs",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": {}
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        },
+        {
+          "id": "silicon.StageRenderer.hidden",
+          "name": "hidden",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": []
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "stage_id",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": "stage"
+            }
+          },
+          {
+            "name": "empty",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": "."
+            }
+          },
+          {
+            "name": "border",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": true
+            }
+          },
+          {
+            "name": "clear",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": false
+            }
+          },
+          {
+            "name": "ansi",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": false
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/__init__.py",
+        "line": 815,
+        "endLine": 887,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Grid",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.StateMachine",
+      "version": 1,
+      "provider": "silicon",
+      "name": "StateMachine",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.StateMachine.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "initial",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": ""
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 987
+        },
+        {
+          "id": "silicon.StateMachine.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 988
+        },
+        {
+          "id": "silicon.StateMachine.on_attach",
+          "name": "on_attach",
+          "kind": "lifecycle",
+          "parameters": [
+            {
+              "name": "game",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 989
+        },
+        {
+          "id": "silicon.StateMachine.transition",
+          "name": "transition",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "state",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 992
+        },
+        {
+          "id": "silicon.StateMachine.changed",
+          "name": "changed",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "state",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 997
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.StateMachine.current",
+          "name": "current",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": ""
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "initial",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": ""
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/__init__.py",
+        "line": 985,
+        "endLine": 997,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Flow",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Timer",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Timer",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Timer.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "seconds",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": 60
+              }
+            },
+            {
+              "name": "repeat",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": false
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 683
+        },
+        {
+          "id": "silicon.Timer.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 687
+        },
+        {
+          "id": "silicon.Timer.start",
+          "name": "start",
+          "kind": "input",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 689
+        },
+        {
+          "id": "silicon.Timer.stop",
+          "name": "stop",
+          "kind": "input",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 693
+        },
+        {
+          "id": "silicon.Timer.reset",
+          "name": "reset",
+          "kind": "input",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 695
+        },
+        {
+          "id": "silicon.Timer.finished",
+          "name": "finished",
+          "kind": "output",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 699
+        },
+        {
+          "id": "silicon.Timer.tick",
+          "name": "tick",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "remaining",
+              "annotation": "float",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 701
+        },
+        {
+          "id": "silicon.Timer.advance",
+          "name": "advance",
+          "kind": "update",
+          "parameters": [
+            {
+              "name": "dt",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "update()"
+          ],
+          "async": false,
+          "description": "",
+          "line": 703,
+          "rate": {
+            "kind": "literal",
+            "value": 0
+          }
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.Timer.remaining",
+          "name": "remaining",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": 0.0
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        },
+        {
+          "id": "silicon.Timer.active",
+          "name": "active",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": false
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "seconds",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": 60
+            }
+          },
+          {
+            "name": "repeat",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": false
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/__init__.py",
+        "line": 680,
+        "endLine": 710,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Flow",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Traits",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Traits",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Traits.set",
+          "name": "set",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "name",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "value",
+              "annotation": "float",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 933
+        },
+        {
+          "id": "silicon.Traits.changed",
+          "name": "changed",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "name",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "value",
+              "annotation": "float",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 937
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.Traits.values",
+          "name": "values",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": {}
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__component__",
+        "parameters": []
+      },
+      "serialization": {
+        "toConfig": false,
+        "fromConfig": false,
+        "status": "basePattern"
+      },
+      "provenance": {
+        "path": "silicon/__init__.py",
+        "line": 930,
+        "endLine": 937,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Entities",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Transform2D",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Transform2D",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Transform2D.place",
+          "name": "place",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "x",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "y",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 19
+        },
+        {
+          "id": "silicon.Transform2D.move",
+          "name": "move",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "dx",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "dy",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 25
+        },
+        {
+          "id": "silicon.Transform2D.remove",
+          "name": "remove",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 30
+        },
+        {
+          "id": "silicon.Transform2D.moved",
+          "name": "moved",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "x",
+              "annotation": "float",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "y",
+              "annotation": "float",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 35
+        },
+        {
+          "id": "silicon.Transform2D.removed",
+          "name": "removed",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 38
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.Transform2D.positions",
+          "name": "positions",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": {}
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__component__",
+        "parameters": []
+      },
+      "serialization": {
+        "toConfig": false,
+        "fromConfig": false,
+        "status": "basePattern"
+      },
+      "provenance": {
+        "path": "silicon/components.py",
+        "line": 15,
+        "endLine": 38,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Physics",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.TurnManager",
+      "version": 1,
+      "provider": "silicon",
+      "name": "TurnManager",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.TurnManager.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "players",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 716
+        },
+        {
+          "id": "silicon.TurnManager.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 719
+        },
+        {
+          "id": "silicon.TurnManager.advance",
+          "name": "advance",
+          "kind": "input",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 721
+        },
+        {
+          "id": "silicon.TurnManager.begin",
+          "name": "begin",
+          "kind": "input",
+          "parameters": [],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 730
+        },
+        {
+          "id": "silicon.TurnManager.next_turn",
+          "name": "next_turn",
+          "kind": "trigger",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": null
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "trigger"
+          ],
+          "async": false,
+          "description": "",
+          "line": 733
+        },
+        {
+          "id": "silicon.TurnManager.turn_started",
+          "name": "turn_started",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "player",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 736
+        },
+        {
+          "id": "silicon.TurnManager.round_started",
+          "name": "round_started",
+          "kind": "output",
+          "parameters": [
+            {
+              "name": "number",
+              "annotation": "int",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "output"
+          ],
+          "async": false,
+          "description": "",
+          "line": 738
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.TurnManager.index",
+          "name": "index",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": 0
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        },
+        {
+          "id": "silicon.TurnManager.round",
+          "name": "round",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": 1
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "players",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": null
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/__init__.py",
+        "line": 713,
+        "endLine": 738,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Flow",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    },
+    {
+      "id": "silicon.Velocity",
+      "version": 1,
+      "provider": "silicon",
+      "name": "Velocity",
+      "module": "silicon",
+      "kind": "component",
+      "description": "",
+      "bases": [
+        "Component"
+      ],
+      "members": [
+        {
+          "id": "silicon.Velocity.__init__",
+          "name": "__init__",
+          "kind": "method",
+          "parameters": [
+            {
+              "name": "transform_id",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "literal",
+                "value": "transform"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 45
+        },
+        {
+          "id": "silicon.Velocity.to_config",
+          "name": "to_config",
+          "kind": "method",
+          "parameters": [],
+          "returns": null,
+          "decorators": [],
+          "async": false,
+          "description": "",
+          "line": 49
+        },
+        {
+          "id": "silicon.Velocity.set",
+          "name": "set",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "x",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "y",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 52
+        },
+        {
+          "id": "silicon.Velocity.accelerate",
+          "name": "accelerate",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "x",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            },
+            {
+              "name": "y",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 56
+        },
+        {
+          "id": "silicon.Velocity.stop",
+          "name": "stop",
+          "kind": "input",
+          "parameters": [
+            {
+              "name": "entity",
+              "annotation": "str",
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "input"
+          ],
+          "async": false,
+          "description": "",
+          "line": 61
+        },
+        {
+          "id": "silicon.Velocity.advance",
+          "name": "advance",
+          "kind": "update",
+          "parameters": [
+            {
+              "name": "dt",
+              "annotation": null,
+              "kind": "positionalOrKeyword",
+              "default": {
+                "kind": "missing"
+              }
+            }
+          ],
+          "returns": null,
+          "decorators": [
+            "update()"
+          ],
+          "async": false,
+          "description": "",
+          "line": 65,
+          "rate": {
+            "kind": "literal",
+            "value": 0
+          }
+        }
+      ],
+      "state": [
+        {
+          "id": "silicon.Velocity.velocities",
+          "name": "velocities",
+          "annotation": null,
+          "default": {
+            "kind": "literal",
+            "value": {}
+          },
+          "scope": {
+            "kind": "literal",
+            "value": "game"
+          }
+        }
+      ],
+      "constructor": {
+        "strategy": "__init__",
+        "parameters": [
+          {
+            "name": "transform_id",
+            "annotation": null,
+            "kind": "positionalOrKeyword",
+            "default": {
+              "kind": "literal",
+              "value": "transform"
+            }
+          }
+        ]
+      },
+      "serialization": {
+        "toConfig": true,
+        "fromConfig": false,
+        "status": "declared"
+      },
+      "provenance": {
+        "path": "silicon/components.py",
+        "line": 42,
+        "endLine": 70,
+        "revision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb"
+      },
+      "confidence": "static",
+      "warnings": [],
+      "category": "Physics",
+      "optionalDependencies": [],
+      "lifecycleHooks": [
+        "on_attach",
+        "on_detach",
+        "on_pause",
+        "on_resume",
+        "on_start",
+        "on_stop"
+      ]
+    }
+  ]
+}

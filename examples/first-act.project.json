@@ -1,0 +1,215 @@
+{
+  "format": "actwright",
+  "schemaVersion": 1,
+  "id": "5858c435-d0dc-4365-a307-48b85dc2140b",
+  "revision": 0,
+  "name": "First Act",
+  "createdAt": "2026-10-19T21:35:24.803Z",
+  "updatedAt": "2026-10-19T21:35:24.803Z",
+  "siliconRevision": "9a8db8bd5187011e20f16ad1d0964aeb251ff1eb",
+  "game": {
+    "id": "241b1d03-bffb-414c-8d51-35daac6887e3",
+    "name": "First Act",
+    "seed": 7,
+    "tickRate": 60,
+    "order": [
+      "100d306b-5d0b-44f9-a1c6-d11d6155722a",
+      "789fba72-f681-4e3b-93d1-7d57e3172de0",
+      "07de8f2c-06e8-4738-b985-05dbce552bb2",
+      "7c111b36-3845-408e-8465-79bbe6c2f20d"
+    ],
+    "validation": "framework"
+  },
+  "definitions": {},
+  "instances": {
+    "100d306b-5d0b-44f9-a1c6-d11d6155722a": {
+      "id": "100d306b-5d0b-44f9-a1c6-d11d6155722a",
+      "typeId": "silicon.Stage2D",
+      "name": "Stage2D",
+      "config": {
+        "width": 8,
+        "height": 6
+      },
+      "state": {},
+      "scripts": [],
+      "construction": {
+        "kind": "add",
+        "runtimeId": "stage"
+      }
+    },
+    "789fba72-f681-4e3b-93d1-7d57e3172de0": {
+      "id": "789fba72-f681-4e3b-93d1-7d57e3172de0",
+      "typeId": "silicon.Entity",
+      "name": "Entity",
+      "config": {
+        "name": "Entity"
+      },
+      "state": {},
+      "scripts": [],
+      "construction": {
+        "kind": "tree"
+      }
+    },
+    "07de8f2c-06e8-4738-b985-05dbce552bb2": {
+      "id": "07de8f2c-06e8-4738-b985-05dbce552bb2",
+      "typeId": "silicon.InputMap",
+      "name": "InputMap",
+      "config": {
+        "bindings": null
+      },
+      "state": {},
+      "scripts": [],
+      "construction": {
+        "kind": "add",
+        "runtimeId": "keys"
+      }
+    },
+    "7c111b36-3845-408e-8465-79bbe6c2f20d": {
+      "id": "7c111b36-3845-408e-8465-79bbe6c2f20d",
+      "typeId": "silicon.GridMovement",
+      "name": "GridMovement",
+      "config": {
+        "entity": "player",
+        "stage_id": "stage"
+      },
+      "state": {},
+      "scripts": [],
+      "construction": {
+        "kind": "add",
+        "runtimeId": "movement"
+      }
+    }
+  },
+  "locations": [
+    {
+      "id": "1ebb8f88-401a-43fe-be2f-28cb4724e6c4",
+      "parentId": "241b1d03-bffb-414c-8d51-35daac6887e3",
+      "componentId": "100d306b-5d0b-44f9-a1c6-d11d6155722a",
+      "kind": "canonical",
+      "aliases": [
+        "stage"
+      ],
+      "singleton": false
+    },
+    {
+      "id": "a139cf27-c4f7-4cbb-9312-15edd8164fe2",
+      "parentId": "100d306b-5d0b-44f9-a1c6-d11d6155722a",
+      "componentId": "789fba72-f681-4e3b-93d1-7d57e3172de0",
+      "kind": "canonical",
+      "aliases": [
+        "player",
+        "hero"
+      ],
+      "singleton": false
+    },
+    {
+      "id": "68c2e970-9f60-42ee-acce-a65a7feab492",
+      "parentId": "241b1d03-bffb-414c-8d51-35daac6887e3",
+      "componentId": "789fba72-f681-4e3b-93d1-7d57e3172de0",
+      "kind": "link",
+      "aliases": [
+        "player"
+      ],
+      "singleton": false
+    },
+    {
+      "id": "e321ed8b-1e4a-427a-9166-2071fe7e1989",
+      "parentId": "241b1d03-bffb-414c-8d51-35daac6887e3",
+      "componentId": "07de8f2c-06e8-4738-b985-05dbce552bb2",
+      "kind": "canonical",
+      "aliases": [
+        "keys"
+      ],
+      "singleton": false
+    },
+    {
+      "id": "c1b1740f-0071-4a16-9497-761bc9a58121",
+      "parentId": "241b1d03-bffb-414c-8d51-35daac6887e3",
+      "componentId": "7c111b36-3845-408e-8465-79bbe6c2f20d",
+      "kind": "canonical",
+      "aliases": [
+        "movement"
+      ],
+      "singleton": false
+    }
+  ],
+  "slotEdges": [
+    {
+      "id": "7eeee1bb-7ee0-4f62-be90-8f1b6e1d139d",
+      "sourceId": "07de8f2c-06e8-4738-b985-05dbce552bb2",
+      "output": "action",
+      "targetId": "7c111b36-3845-408e-8465-79bbe6c2f20d",
+      "input": "command",
+      "enabled": true
+    }
+  ],
+  "triggerRules": [
+    {
+      "id": "82f6557f-32ee-4432-8e96-0259c631189a",
+      "source": {
+        "kind": "game",
+        "member": "start"
+      },
+      "targets": [
+        {
+          "kind": "trigger",
+          "selector": {
+            "id": "1f34667b-cee1-4d10-a1e5-d247d3afbc75",
+            "root": "241b1d03-bffb-414c-8d51-35daac6887e3",
+            "path": [
+              {
+                "typeId": "silicon.Entity",
+                "match": {
+                  "kind": "ids",
+                  "optional": false,
+                  "tokens": [
+                    {
+                      "kind": "exact",
+                      "value": "player"
+                    }
+                  ]
+                }
+              }
+            ],
+            "result": "selection"
+          },
+          "member": "spawn"
+        }
+      ]
+    }
+  ],
+  "scripts": {},
+  "sourceModules": {},
+  "assets": {},
+  "plugins": [],
+  "extensions": {},
+  "editor": {
+    "nodes": {
+      "100d306b-5d0b-44f9-a1c6-d11d6155722a": {
+        "x": 130,
+        "y": 100,
+        "collapsed": false
+      },
+      "789fba72-f681-4e3b-93d1-7d57e3172de0": {
+        "x": 160,
+        "y": 100,
+        "collapsed": false
+      },
+      "07de8f2c-06e8-4738-b985-05dbce552bb2": {
+        "x": 190,
+        "y": 100,
+        "collapsed": false
+      },
+      "7c111b36-3845-408e-8465-79bbe6c2f20d": {
+        "x": 220,
+        "y": 100,
+        "collapsed": false
+      }
+    },
+    "viewport": {
+      "x": 0,
+      "y": 0,
+      "zoom": 1
+    }
+  }
+}

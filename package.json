@@ -1,0 +1,51 @@
+{
+  "name": "actwright",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test --test-isolation=none tests/core/*.test.ts",
+    "test:python": "python3 -m unittest discover -s backend/tests -v",
+    "metadata": "python3 scripts/generate_metadata.py",
+    "check:metadata": "python3 scripts/generate_metadata.py --check",
+    "check": "npm run typecheck && npm test && npm run test:python",
+    "schemas": "python3 scripts/generate_schemas.py",
+    "dev": "vite --host 127.0.0.1",
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test:browser": "playwright test",
+    "runtime": "python3 -m backend.app.runtime.server"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "fake-indexeddb": "^6.0.0",
+    "typescript": "6.0.3",
+    "vite": "8.0.16"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "dependencies": {
+    "blockly": "^13.4.0",
+    "dexie": "^4.0.11",
+    "fflate": "^0.8.2",
+    "lucide-react": "^0.468.0",
+    "monaco-editor": "^0.57.0",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "rete": "2.0.6",
+    "rete-area-plugin": "2.3.2",
+    "rete-connection-plugin": "2.0.5",
+    "rete-minimap-plugin": "2.0.3",
+    "rete-react-plugin": "2.1.2",
+    "rete-render-utils": "2.0.3",
+    "styled-components": "^6.1.19"
+  },
+  "allowScripts": {
+    "rete@2.0.6": true
+  }
+}

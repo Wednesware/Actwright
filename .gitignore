@@ -1,0 +1,9 @@
+node_modules/
+__pycache__/
+.pytest_cache/
+.venv/
+coverage/
+frontend/dist/
+test-results/
+playwright-report/
+.env

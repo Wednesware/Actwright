@@ -1,0 +1,1563 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://actwright.wednesware.org/schemas/metadata.v1.json",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "enum": [
+        1
+      ]
+    },
+    "provider": {
+      "enum": [
+        "silicon"
+      ]
+    },
+    "revision": {
+      "type": "string"
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "root": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "enum": [
+            "Game"
+          ]
+        },
+        "module": {
+          "enum": [
+            "silicon"
+          ]
+        },
+        "parameters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Parameter"
+          }
+        },
+        "triggers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "asyncRun": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "module",
+        "parameters",
+        "triggers",
+        "asyncRun"
+      ],
+      "additionalProperties": false
+    },
+    "definitions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Definition"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "provider",
+    "revision",
+    "sources",
+    "root",
+    "definitions"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "Json": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Json"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/Json"
+          }
+        }
+      ]
+    },
+    "Value": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "missing"
+              ]
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "literal"
+              ]
+            },
+            "value": {
+              "$ref": "#/$defs/Json"
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "source"
+              ]
+            },
+            "source": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "source"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Parameter": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "annotation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "kind": {
+          "enum": [
+            "positionalOnly",
+            "positionalOrKeyword",
+            "keywordOnly",
+            "varPositional",
+            "varKeyword"
+          ]
+        },
+        "default": {
+          "$ref": "#/$defs/Value"
+        }
+      },
+      "required": [
+        "name",
+        "annotation",
+        "kind",
+        "default"
+      ],
+      "additionalProperties": false
+    },
+    "Member": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "input",
+            "output",
+            "trigger",
+            "method",
+            "update",
+            "property",
+            "lifecycle"
+          ]
+        },
+        "parameters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Parameter"
+          }
+        },
+        "returns": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "decorators": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "async": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string"
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "rate": {
+          "$ref": "#/$defs/Value"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "kind",
+        "parameters",
+        "returns",
+        "decorators",
+        "async",
+        "description",
+        "line"
+      ],
+      "additionalProperties": false
+    },
+    "Definition": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "provider": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "module": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "component",
+            "function"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "bases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Member"
+          }
+        },
+        "state": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "annotation": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "default": {
+                "$ref": "#/$defs/Value"
+              },
+              "scope": {
+                "$ref": "#/$defs/Value"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "annotation",
+              "default",
+              "scope"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "constructor": {
+          "type": "object",
+          "properties": {
+            "strategy": {
+              "enum": [
+                "__init__",
+                "__component__",
+                "inherited",
+                "function"
+              ]
+            },
+            "parameters": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Parameter"
+              }
+            }
+          },
+          "required": [
+            "strategy",
+            "parameters"
+          ],
+          "additionalProperties": false
+        },
+        "serialization": {
+          "type": "object",
+          "properties": {
+            "toConfig": {
+              "type": "boolean"
+            },
+            "fromConfig": {
+              "type": "boolean"
+            },
+            "status": {
+              "enum": [
+                "unknown",
+                "declared",
+                "basePattern"
+              ]
+            }
+          },
+          "required": [
+            "toConfig",
+            "fromConfig",
+            "status"
+          ],
+          "additionalProperties": false
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "line": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "endLine": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "revision": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "path",
+            "line",
+            "endLine",
+            "revision"
+          ],
+          "additionalProperties": false
+        },
+        "confidence": {
+          "enum": [
+            "static"
+          ]
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "category": {
+          "type": "string"
+        },
+        "optionalDependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lifecycleHooks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "provider",
+        "name",
+        "module",
+        "kind",
+        "description",
+        "bases",
+        "members",
+        "state",
+        "constructor",
+        "serialization",
+        "provenance",
+        "confidence",
+        "warnings",
+        "category",
+        "optionalDependencies"
+      ],
+      "additionalProperties": false
+    },
+    "Selector": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "root": {
+          "type": "string"
+        },
+        "path": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "typeId": {
+                "type": "string"
+              },
+              "match": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "enum": [
+                          "singleton"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "kind"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "enum": [
+                          "ids"
+                        ]
+                      },
+                      "tokens": {
+                        "type": "array",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "enum": [
+                                    "exact"
+                                  ]
+                                },
+                                "value": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "value"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "enum": [
+                                    "glob"
+                                  ]
+                                },
+                                "pattern": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "pattern"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "enum": [
+                                    "numbered"
+                                  ]
+                                },
+                                "prefix": {
+                                  "type": "string"
+                                },
+                                "offset": {
+                                  "type": "integer",
+                                  "maximum": 0
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "prefix",
+                                "offset"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ]
+                        }
+                      },
+                      "optional": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "tokens",
+                      "optional"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "typeId",
+              "match"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "result": {
+          "enum": [
+            "selection",
+            "component"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "root",
+        "path",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    "Expression": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "literal"
+              ]
+            },
+            "value": {
+              "$ref": "#/$defs/Json"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "variable"
+              ]
+            },
+            "name": {
+              "type": "string"
+            },
+            "symbolId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "name",
+            "symbolId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "unary"
+              ]
+            },
+            "operator": {
+              "type": "string"
+            },
+            "operand": {
+              "$ref": "#/$defs/Expression"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "operator",
+            "operand"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "binary"
+              ]
+            },
+            "operator": {
+              "type": "string"
+            },
+            "left": {
+              "$ref": "#/$defs/Expression"
+            },
+            "right": {
+              "$ref": "#/$defs/Expression"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "operator",
+            "left",
+            "right"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "attribute"
+              ]
+            },
+            "object": {
+              "$ref": "#/$defs/Expression"
+            },
+            "name": {
+              "type": "string"
+            },
+            "memberId": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "object",
+            "name",
+            "memberId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "call"
+              ]
+            },
+            "callee": {
+              "$ref": "#/$defs/Expression"
+            },
+            "args": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Expression"
+              }
+            },
+            "keywords": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "$ref": "#/$defs/Expression"
+                  }
+                },
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "callee",
+            "args",
+            "keywords"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "selector"
+              ]
+            },
+            "selector": {
+              "$ref": "#/$defs/Selector"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "selector"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "collection"
+              ]
+            },
+            "collection": {
+              "enum": [
+                "list",
+                "tuple",
+                "set"
+              ]
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Expression"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "collection",
+            "items"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "rawExpression"
+              ]
+            },
+            "regionId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "regionId"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Statement": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "expression"
+              ]
+            },
+            "expression": {
+              "$ref": "#/$defs/Expression"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "expression"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "assignment"
+              ]
+            },
+            "target": {
+              "$ref": "#/$defs/Expression"
+            },
+            "value": {
+              "$ref": "#/$defs/Expression"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "target",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "if"
+              ]
+            },
+            "condition": {
+              "$ref": "#/$defs/Expression"
+            },
+            "then": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Statement"
+              }
+            },
+            "otherwise": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Statement"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "condition",
+            "then",
+            "otherwise"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "while"
+              ]
+            },
+            "condition": {
+              "$ref": "#/$defs/Expression"
+            },
+            "body": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Statement"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "condition",
+            "body"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "for"
+              ]
+            },
+            "target": {
+              "$ref": "#/$defs/Expression"
+            },
+            "iterable": {
+              "$ref": "#/$defs/Expression"
+            },
+            "body": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Statement"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "target",
+            "iterable",
+            "body"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "return"
+              ]
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Expression"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "comment"
+              ]
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "text"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "function",
+                "method"
+              ]
+            },
+            "name": {
+              "type": "string"
+            },
+            "parameters": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Parameter"
+              }
+            },
+            "decorators": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Expression"
+              }
+            },
+            "body": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Statement"
+              }
+            },
+            "async": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "name",
+            "parameters",
+            "decorators",
+            "body",
+            "async"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "class"
+              ]
+            },
+            "name": {
+              "type": "string"
+            },
+            "bases": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Expression"
+              }
+            },
+            "decorators": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Expression"
+              }
+            },
+            "body": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Statement"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "name",
+            "bases",
+            "decorators",
+            "body"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "state"
+              ]
+            },
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "$ref": "#/$defs/Expression"
+            },
+            "scope": {
+              "enum": [
+                "game",
+                "shared"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "name",
+            "value",
+            "scope"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "signalConnect",
+                "triggerConnect"
+              ]
+            },
+            "source": {
+              "$ref": "#/$defs/Expression"
+            },
+            "targets": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Expression"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "source",
+            "targets"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "componentCreate"
+              ]
+            },
+            "target": {
+              "$ref": "#/$defs/Expression"
+            },
+            "constructor": {
+              "$ref": "#/$defs/Expression"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "target",
+            "constructor"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "componentLink"
+              ]
+            },
+            "target": {
+              "$ref": "#/$defs/Expression"
+            },
+            "source": {
+              "$ref": "#/$defs/Expression"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "target",
+            "source"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "raw"
+              ]
+            },
+            "regionId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "regionId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sourceRegionId": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "extension"
+              ]
+            },
+            "provider": {
+              "type": "string"
+            },
+            "version": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "payload": {
+              "$ref": "#/$defs/Json"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "provider",
+            "version",
+            "payload"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Program": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "enum": [
+            1
+          ]
+        },
+        "body": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Statement"
+          }
+        },
+        "regions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              },
+              "context": {
+                "enum": [
+                  "expression",
+                  "suite",
+                  "module"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "source",
+              "reason",
+              "context"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "version",
+        "body",
+        "regions"
+      ],
+      "additionalProperties": false
+    },
+    "Script": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "ownerId": {
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "startup",
+            "input",
+            "output",
+            "trigger",
+            "method",
+            "update",
+            "lifecycle",
+            "handler",
+            "module"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Parameter"
+          }
+        },
+        "program": {
+          "$ref": "#/$defs/Program"
+        },
+        "synchronizedSource": {
+          "type": "string"
+        },
+        "draft": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "type": "string"
+                },
+                "revision": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "status": {
+                  "enum": [
+                    "pending",
+                    "invalid"
+                  ]
+                },
+                "diagnostics": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "source",
+                "revision",
+                "status",
+                "diagnostics"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "role",
+        "name",
+        "parameters",
+        "program",
+        "synchronizedSource",
+        "draft"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
