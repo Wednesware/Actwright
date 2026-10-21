@@ -48,7 +48,10 @@ already running Vite server after updating its configuration.
    to a fresh game. InputMap components accept commands through the console form.
 
 Scripts can handle game start/pause/resume/stop and component triggers. Script nodes
-connect to trigger sockets just like components. The **Scripts** tab provides a
+connect to the same blue behavior sockets as component outputs and game events.
+Any behavior output can connect to a component input, a callable trigger, or another
+Script’s Run script input. Script-to-script connections pass emitted arguments
+to the receiving script’s callback parameters. The **Scripts** tab provides a
 focused list of script editors. Blockly and Monaco live only in this tab. Collapse
 an editor to unload it; Save, Check, Delete and Expand stay available. Graph cards
 keep their inputs, outputs, editable descriptions and **Edit Script** button. Save stores the script in

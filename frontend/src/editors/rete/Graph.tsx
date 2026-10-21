@@ -20,7 +20,7 @@ export type Relationship = 'signal' | 'trigger' | 'hierarchy' | 'link';
 type Filters = Record<Relationship, boolean>;
 class ActSocket extends ClassicPreset.Socket {
   kind: Relationship;
-  constructor(name: string, kind: Relationship) { super(name); this.kind = kind; }
+  constructor(name: string, kind: Relationship) { super(name); this.kind = kind === 'trigger' ? 'signal' : kind; }
 }
 class ActNode extends ClassicPreset.Node<Record<string, ActSocket>, Record<string, ActSocket>> {
   width = 270;
@@ -62,7 +62,7 @@ class ActConnection extends ClassicPreset.Connection<ActNode, ActNode> {
   label = '';
   openMenu: (event: MouseEvent) => void = () => {};
   constructor(source: ActNode, output: string, target: ActNode, input: string, kind: Relationship, id: string) {
-    super(source, output, target, input); this.id = id; this.kind = kind; this.label = `${source.label}.${output.replace(/^(out:|trig-out:)/, '')} → ${target.label}.${input.replace(/^(in:|trig-in:)/, '')}`;
+    super(source, output, target, input); this.id = id; this.kind = kind === 'trigger' ? 'signal' : kind; this.label = `${source.label}.${output.replace(/^(out:|trig-out:)/, '')} → ${target.label}.${input.replace(/^(in:|trig-in:)/, '')}`;
   }
 }
 type Schemes = GetSchemes<ActNode, ActConnection>;
@@ -139,19 +139,10 @@ function createGraph(container: HTMLElement, editScript: (id: string) => void, p
     if (event.type === 'connectioncreate') {
       const edge = event.data;
       const accepted = workspace.commit(project => {
-        if (edge.targetInput === 'script' && String(edge.sourceOutput).startsWith('trig-out:')) {
-          const member = String(edge.sourceOutput).slice(9);
-          project.triggerRules.push({ id: edge.id, source: edge.source === project.game.id ? { kind: 'game', member: member as 'start' | 'pause' | 'resume' | 'stop' } : { kind: 'component', selector: { id: crypto.randomUUID(), root: edge.source, path: [], result: 'selection' }, member }, targets: [{ kind: 'script', scriptId: edge.target }] });
-        } else if (String(edge.sourceOutput).startsWith('out:') && String(edge.targetInput).startsWith('in:')) {
-          project.slotEdges.push({ id: edge.id, sourceId: edge.source, output: String(edge.sourceOutput).slice(4), targetId: edge.target, input: String(edge.targetInput).slice(3), enabled: true });
-        } else if (String(edge.sourceOutput).startsWith('trig-out:') && String(edge.targetInput).startsWith('trig-in:')) {
-          const member = String(edge.sourceOutput).slice(9);
-          const target = { kind: 'trigger' as const, selector: { id: crypto.randomUUID(), root: edge.target, path: [], result: 'selection' as const }, member: String(edge.targetInput).slice(8) };
-          if (edge.source === project.game.id) {
-            if (!['start', 'pause', 'resume', 'stop'].includes(member)) throw new Error('Unknown lifecycle trigger');
-            project.triggerRules.push({ id: edge.id, source: { kind: 'game', member: member as 'start' | 'pause' | 'resume' | 'stop' }, targets: [target] });
-          } else project.triggerRules.push({ id: edge.id, source: { kind: 'component', selector: { id: crypto.randomUUID(), root: edge.source, path: [], result: 'selection' }, member }, targets: [target] });
-        } else throw new Error('Connect an output to an input, or a trigger event to a callable trigger. Edit hierarchy and links in the inspector.');
+        const output = String(edge.sourceOutput), input = String(edge.targetInput);
+        if ((output.startsWith('out:') || output.startsWith('trig-out:')) && (input === 'script' || input.startsWith('in:') || input.startsWith('trig-in:'))) {
+          project.slotEdges.push({ id: edge.id, sourceId: edge.source, output: output.replace(/^(out:|trig-out:)/, ''), targetId: edge.target, input: input === 'script' ? 'run' : input.replace(/^(in:|trig-in:)/, ''), enabled: true });
+        } else throw new Error('Connect a behavior output to an input or script. Edit hierarchy and links in the inspector.');
       });
       // Model changes are rendered through sync; never let plugin state become
       // a second source of truth (including failed/partial rewiring).
@@ -238,7 +229,7 @@ function createGraph(container: HTMLElement, editScript: (id: string) => void, p
         if (view && (view.position.x !== position.x || view.position.y !== position.y)) await area.translate(id, position);
       }
       const addEdge = async (sourceId: string, sourcePort: string, targetId: string, targetPort: string, kind: Relationship, id: string) => {
-        if (!filters[kind]) return;
+        if (!filters[kind === 'trigger' ? 'signal' : kind]) return;
         const source = editor.getNodes().find(n => n.id === sourceId), target = editor.getNodes().find(n => n.id === targetId);
         if (source?.outputs[sourcePort] && target?.inputs[targetPort]) {
           const edge = new ActConnection(source, sourcePort, target, targetPort, kind, id);
@@ -248,7 +239,10 @@ function createGraph(container: HTMLElement, editScript: (id: string) => void, p
         }
       };
       for (const entry of project.locations) await addEdge(entry.parentId, 'children', entry.componentId, entry.kind === 'link' ? 'link' : 'parent', entry.kind === 'link' ? 'link' : 'hierarchy', entry.id);
-      for (const edge of project.slotEdges) if (edge.enabled) await addEdge(edge.sourceId, `out:${edge.output}`, edge.targetId, `in:${edge.input}`, 'signal', edge.id);
+      for (const edge of project.slotEdges) if (edge.enabled) {
+        const source = editor.getNodes().find(node => node.id === edge.sourceId), target = editor.getNodes().find(node => node.id === edge.targetId);
+        await addEdge(edge.sourceId, source?.outputs[`out:${edge.output}`] ? `out:${edge.output}` : `trig-out:${edge.output}`, edge.targetId, target?.script ? 'script' : target?.inputs[`in:${edge.input}`] ? `in:${edge.input}` : `trig-in:${edge.input}`, 'signal', edge.id);
+      }
       for (const rule of project.triggerRules) {
         try {
           const sources = rule.source.kind === 'game' ? [project.game.id] : resolveSelector(project, rule.source.selector);
@@ -341,7 +335,7 @@ export function Graph({ state, onAdd, onAddScript, onInspectTutorial, onEditScri
   }
   return <section className="graph-panel" aria-label="Component graph" onPointerDown={event => { if (menu) setMenu(null); if (!(event.target as Element).closest('.graph-wire,.connection-selection,.graph-context')) setSelectedEdge(null); }}>
     <div className="canvas-heading"><div><span className="eyebrow">WORKSPACE</span><h1>Component graph</h1></div><span className="canvas-hint">Drag to arrange · scroll to zoom</span></div>
-    <div className="relationship-filters" aria-label="Relationship visibility">{(Object.keys(filters) as Relationship[]).map(kind => <button key={kind} aria-pressed={filters[kind]} className={filters[kind] ? kind : 'muted'} onClick={() => setFilters({ ...filters, [kind]: !filters[kind] })}><i/>{kind === 'signal' ? 'Signals' : kind === 'trigger' ? 'Triggers' : kind === 'hierarchy' ? 'Hierarchy' : 'Links'}</button>)}</div>
+    <div className="relationship-filters" aria-label="Relationship visibility">{(['signal', 'hierarchy', 'link'] as Relationship[]).map(kind => <button key={kind} aria-pressed={filters[kind]} className={filters[kind] ? kind : 'muted'} onClick={() => setFilters({ ...filters, [kind]: !filters[kind] })}><i/>{kind === 'signal' ? 'Connections' : kind === 'trigger' ? 'Triggers' : kind === 'hierarchy' ? 'Hierarchy' : 'Links'}</button>)}</div>
     <div ref={container} className="rete-canvas" data-testid="rete-canvas" onDragOver={event => event.preventDefault()} onDrop={event => { if (event.dataTransfer.getData('application/actwright-script')) { event.preventDefault(); onAddScript(api.current?.point(event)); return; } event.preventDefault(); const typeId = event.dataTransfer.getData('application/actwright-component'); if (typeId) onAdd(typeId, api.current?.point(event)); }}/>
     {selectedEdge && selectedExists && <div className="connection-selection" role="region" aria-label="Selected connection" onPointerDown={event => event.stopPropagation()}>
       <span><small>{selectedLocation?.kind === 'canonical' ? 'Canonical parent' : 'Selected connection'}</small><strong title={selectedLabel}>{selectedLabel}</strong></span>

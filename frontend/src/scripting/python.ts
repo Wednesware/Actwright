@@ -77,6 +77,17 @@ export function exportPython(project: ActProject): string {
     'class _ScriptOutputs(_silicon.Component):',
     '    def __component__(self, names):',
     '        self._slots["out"] = {name: _script_payload for name in names}', '', '',
+    'class _CallableInput(_silicon.Component):',
+    '    def __component__(self):',
+    '        self.callback = None',
+    '    @_silicon.input',
+    '    def run(self, *args, **kwargs):',
+    '        return self.callback(*args, **kwargs)', '', '',
+    'def _connect_callable(game, source, callback):',
+    '    component = _CallableInput()',
+    '    component.callback = callback',
+    '    bridge = game[game.add(component)]',
+    '    source >> bridge.ins.run', '', '',
     'def _make_emitter(outputs):',
     '    def emit(name, *args, **kwargs):',
     '        if name not in outputs.component._slots["out"]:',
@@ -130,10 +141,6 @@ export function exportPython(project: ActProject): string {
   Object.values(project.scripts).forEach(script => {
     emit(`script_outputs[${pythonLiteral(script.id)}] = game[game.add(_ScriptOutputs(${pythonLiteral(scriptOutputNames(project, script.id))}))]`);
   });
-  for (const edge of project.slotEdges.filter(edge => edge.enabled)) {
-    const source = project.scripts[edge.sourceId] ? `script_outputs[${pythonLiteral(edge.sourceId)}]` : ref(edge.sourceId);
-    emit(`getattr(${source}.out, ${pythonLiteral(edge.output)}) >> ${ref(edge.targetId)}.ins.${identifier(edge.input)}`);
-  }
   const scriptNames = new Map<string, string>();
   Object.values(project.scripts).forEach((script, index) => {
     const name = `_script_${index}`; scriptNames.set(script.id, name);
@@ -145,6 +152,28 @@ export function exportPython(project: ActProject): string {
     emit(`    {"new_instance": new_instance, "new_singleton": new_singleton, "game": game, "components": components, "self": ${ref(script.ownerId)}, "_script_parent": ${ref(parentId)}, "emit": _make_emitter(script_outputs[${pythonLiteral(script.id)}])}, ${pythonLiteral(parameters)})`);
   });
   const wired = new Set<string>();
+  for (const edge of project.slotEdges.filter(edge => edge.enabled)) {
+    const sourceMember = project.instances[edge.sourceId] && definition(project.instances[edge.sourceId]!.typeId).members.find(member => member.name === edge.output && member.kind === 'trigger');
+    const targetMember = project.instances[edge.targetId] && definition(project.instances[edge.targetId]!.typeId).members.find(member => member.name === edge.input && member.kind === 'trigger');
+    const source = project.scripts[edge.sourceId] ? `getattr(script_outputs[${pythonLiteral(edge.sourceId)}].out, ${pythonLiteral(edge.output)})`
+      : edge.sourceId === project.game.id || sourceMember ? `getattr(${ref(edge.sourceId)}, ${pythonLiteral(edge.output)})`
+      : `getattr(${ref(edge.sourceId)}.out, ${pythonLiteral(edge.output)})`;
+    const target = project.scripts[edge.targetId] ? scriptNames.get(edge.targetId)!
+      : targetMember ? `getattr(${ref(edge.targetId)}, ${pythonLiteral(edge.input)})`
+      : `getattr(${ref(edge.targetId)}.ins, ${pythonLiteral(edge.input)})`;
+    if (project.scripts[edge.targetId]) wired.add(edge.targetId);
+    if (edge.sourceId !== project.game.id && !sourceMember && (project.scripts[edge.targetId] || targetMember)) {
+      if (project.scripts[edge.targetId]) {
+        const sourceComponent = project.instances[edge.sourceId] ? ref(edge.sourceId) : 'None';
+        emit(`_connect_callable(game, ${source}, lambda *args, **kwargs: ${target}(game, ${sourceComponent}, None, *args, **kwargs))`);
+      } else emit(`_connect_callable(game, ${source}, ${target})`);
+    } else if (!project.scripts[edge.targetId] && !targetMember && (edge.sourceId === project.game.id || sourceMember)) {
+      const input = definition(project.instances[edge.targetId]!.typeId).members.find(member => member.name === edge.input && member.kind === 'input')!;
+      const names = input.parameters.filter(parameter => !parameter.kind.startsWith('var')).map(parameter => parameter.name);
+      emit(`${source} >> (lambda **context: ${target}(**{key: value for key, value in context.items() if key in ${pythonLiteral(names)}}))`);
+    } else emit(`${source} >> ${target}`);
+  }
+
   for (const rule of project.triggerRules) {
     const source = rule.source.kind === 'game' ? `game.${rule.source.member}` : `${select(rule.source.selector)}.${identifier(rule.source.member)}`;
     const targets = rule.targets.map(target => {

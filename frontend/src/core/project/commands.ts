@@ -66,7 +66,7 @@ export function removeComponent(project: ActProject, id: string): void {
     for (const key of ['actwright.blockLayouts', 'actwright.scriptLevels', 'actwright.scriptOutputs', 'actwright.scriptDescriptions', 'actwright.nodeSizes']) {
       const entries = project.extensions[key] as Record<string, Json> | undefined; if (entries) delete entries[scriptId];
     }
-    project.slotEdges = project.slotEdges.filter(edge => edge.sourceId !== scriptId);
+    project.slotEdges = project.slotEdges.filter(edge => edge.sourceId !== scriptId && edge.targetId !== scriptId);
   }
   // Remove callbacks owned by deleted components, without removing other targets.
   project.triggerRules = project.triggerRules.filter(rule => {
