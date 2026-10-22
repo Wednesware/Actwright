@@ -1,3 +1,5 @@
+[![Wednesware](https://github.com/Wednesware/Nitrogen/raw/main/wednesware.png)](https://wednesware.org)
+
 # Actwright™
 
 A local-first visual development environment for the Wednesware Silicon Python
