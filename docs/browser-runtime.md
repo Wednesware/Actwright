@@ -9,7 +9,9 @@ The custom domain uses `/`; repository-path hosting can use `/Actwright/`.
 as native execution, then packages those sources and the existing AST converter
 into `python-runtime.json`. The deploy workflow fetches the verified checkout
 before building. Generated bundles stay out of Git. Pyodide itself loads lazily
-from its versioned jsDelivr URL; no package installer runs user-requested imports.
+from its versioned jsDelivr URL; no package installer runs user-requested imports. A browser adapter exposes
+Nitrogen’s `require("si")` / `require("silicon")` interface for the verified bundle;
+other publications or explicit releases require the native companion.
 
 Script checks use a dedicated worker and the existing non-executing analyzer.
 Each Run creates another worker with fresh Python modules and game state.
@@ -36,3 +38,11 @@ Run `npm run build` then `npm run test:static` to test the actual static artifac
 with no companion. The test covers script analysis, Silicon startup, pause/resume,
 restart, terminating an infinite startup loop, sequential console input, and
 cancelling a pending prompt. It also asserts that no `/api` requests occur.
+
+
+Startup-only Acts now stop once their synchronous callbacks and tracked tasks
+finish. Update hooks and input/host components retain the loop. The worker sends
+a completion message after final logs/status have flushed; the page then disposes
+the worker and prompt channel. Warning events retain their own console level.
+Standalone exports load Silicon through the real Nitrogen `require("si")`; in-app
+runs continue to import the verified embedded module directly.

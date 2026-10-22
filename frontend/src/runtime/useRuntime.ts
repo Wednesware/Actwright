@@ -33,7 +33,7 @@ export function useRuntime(projectId: string | undefined) {
     setBusy(true);
     try {
       const launchedProject = projectId;
-      const source = await workspace.pythonSource();
+      const source = await workspace.pythonSource(true);
       if (owner.current !== launchedProject) throw new Error('The open Act changed. Press Run again.');
       const result = await runPython(source);
       if (owner.current !== launchedProject && result.runId) { await runtimeCommand('stop', result.runId); return; }

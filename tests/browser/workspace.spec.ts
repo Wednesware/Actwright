@@ -325,19 +325,20 @@ test('Modules offers Nitrogen require in both levels and the renamed categories 
   await expect(page.getByRole('treeitem', { name: 'Errors & resources', exact: true })).toHaveCount(0);
   await page.getByRole('treeitem', { name: 'Modules', exact: true }).click();
   await expect(page.locator('.blocklyToolboxFlyout')).toContainText('Load publication');
-  await expect(page.locator('.blocklyToolboxFlyout')).toContainText('magnesium');
+  await expect(page.locator('.blocklyToolboxFlyout')).toContainText('si');
   await page.getByRole('button', { name: '2 · Python blocks', exact: true }).click();
   await page.getByRole('treeitem', { name: 'Modules', exact: true }).click();
   await expect(page.locator('.blocklyToolboxFlyout')).toContainText('require (');
 });
 
-test('Value and Components toolbox entries are available in both levels with component types and icons', async ({ page }) => {
+test('Typed values and Components toolbox entries are available in both levels with component types and icons', async ({ page }) => {
   await example(page);
   await createScript(page);
   for (const level of ['1 · Descriptive blocks', '2 · Python blocks']) {
     await page.getByRole('button', { name: level, exact: true }).click();
     await page.getByRole('treeitem', { name: 'Values', exact: true }).click();
-    await expect(page.locator('.blocklyToolboxFlyout')).toContainText('Value:');
+    await expect(page.locator('.blocklyToolboxFlyout')).not.toContainText('Value:');
+    await expect(page.locator('.blocklyToolboxFlyout')).toContainText(level.startsWith('1') ? 'Integer:' : 'int');
     await page.getByRole('treeitem', { name: 'Components', exact: true }).click();
     const flyout = page.locator('.blocklyToolboxFlyout');
     await expect(flyout).toContainText(level.startsWith('1') ? 'New instance of' : 'new_instance(');
@@ -420,7 +421,7 @@ test('Blockly drag follows the pointer at different zoom levels in Scripts', asy
   }
 });
 
-test('component references and compact Value expressions survive dragging from the toolbox and switching levels', async ({ page }) => {
+test('component references and variable expressions survive dragging from the toolbox and switching levels', async ({ page }) => {
   await example(page);
   await createScript(page);
   const editor = page.locator('.blocks-editor');
@@ -430,15 +431,16 @@ test('component references and compact Value expressions survive dragging from t
     if (!source || !target) throw new Error('Blockly toolbox or canvas is missing');
     await page.mouse.move(source.x + 25, source.y + 15); await page.mouse.down();
     await page.mouse.move(target.x + target.width - 190, target.y + target.height - 160, { steps: 15 }); await page.mouse.up();
-    await page.getByRole('treeitem', { name: /Values|Components/ }).first().press('Escape');
+    await page.getByRole('treeitem', { name: /Variables|Values|Components/ }).first().press('Escape');
   }
   await page.getByRole('treeitem', { name: 'Components', exact: true }).click();
   await dragFlyout('Stage2D');
   await page.getByRole('button', { name: '2 · Python blocks', exact: true }).click();
   await expect(editor.locator('.blocklyBlockCanvas').filter({ hasText: 'Stage2D' })).toHaveCount(1);
-  await page.getByRole('treeitem', { name: 'Values', exact: true }).click();
-  await dragFlyout('Value:');
-  const code = editor.locator('.blocklySvg > .blocklyWorkspace .blocklyEditableField').filter({ hasText: /^game$/ }).first();
+  await page.getByRole('button', { name: '1 · Descriptive blocks', exact: true }).click();
+  await page.getByRole('treeitem', { name: 'Variables', exact: true }).click();
+  await dragFlyout('Value named');
+  const code = editor.getByRole('button', { name: /Edit text: empty/ }).first();
   await code.dblclick();
   await page.locator('.blocklyHtmlInput').fill('"hello".upper()'); await page.locator('.blocklyHtmlInput').press('Enter');
   await page.getByRole('button', { name: '3 · Python', exact: true }).click();

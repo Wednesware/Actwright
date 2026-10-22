@@ -16,19 +16,19 @@ function script(project: ActProject, event: string, source: string) {
 }
 const lifecycle = createProject('Hello');
 for (const event of ['start', 'pause', 'resume', 'stop']) script(lifecycle, event, `print(${JSON.stringify(event)})`);
-writeFileSync(join(destination, 'lifecycle.py'), exportPython(lifecycle));
+writeFileSync(join(destination, 'lifecycle.py'), exportPython(lifecycle, { embeddedRuntime: true }));
 const graph = parseProject(structuredClone(sample));
 script(graph, 'start', 'print("hello")');
-writeFileSync(join(destination, 'graph.py'), exportPython(graph));
+writeFileSync(join(destination, 'graph.py'), exportPython(graph, { embeddedRuntime: true }));
 const numbered = createProject();
 addComponent(numbered, builtins(), 'silicon.Entity', { aliases: ['enemy0'], config: { name: 'First' } });
 numbered.triggerRules.push({ id: crypto.randomUUID(), source: { kind: 'game', member: 'start' }, targets: [{ kind: 'trigger', member: 'spawn', selector: {
   id: crypto.randomUUID(), root: numbered.game.id, result: 'selection', path: [{ typeId: 'silicon.Entity', match: { kind: 'ids', optional: false, tokens: [{ kind: 'numbered', prefix: 'enemy', offset: 0 }] } }],
 } }] });
-writeFileSync(join(destination, 'numbered.py'), exportPython(numbered));
+writeFileSync(join(destination, 'numbered.py'), exportPython(numbered, { embeddedRuntime: true }));
 const literal = createProject('Multiline');
 script(literal, 'start', 'message = """hello\nworld"""\nprint(repr(message))\n# source comment retained\n');
-writeFileSync(join(destination, 'literal.py'), exportPython(literal));
+writeFileSync(join(destination, 'literal.py'), exportPython(literal, { embeddedRuntime: true }));
 const outputs = createProject('Script outputs');
 const score = addComponent(outputs, builtins(), 'silicon.Score', { aliases: ['score'] });
 const stage = addComponent(outputs, builtins(), 'silicon.Stage2D', { aliases: ['stage'], config: { width: 8, height: 8 } });
@@ -43,7 +43,7 @@ const { reconcileScriptOutputs } = await import('../frontend/src/core/project/sc
 reconcileScriptOutputs(outputs, emitId, outputs.scripts[emitId]!.synchronizedSource, ['points', 'place']);
 outputs.slotEdges.push({ id: crypto.randomUUID(), sourceId: emitId, output: 'points', targetId: score, input: 'add', enabled: true }, { id: crypto.randomUUID(), sourceId: emitId, output: 'place', targetId: stage, input: 'place', enabled: true });
 outputs.triggerRules.push({ id: crypto.randomUUID(), source: { kind: 'game', member: 'start' }, targets: [{ kind: 'trigger', member: 'spawn', selector: { id: crypto.randomUUID(), root: player, path: [], result: 'selection' } }] });
-writeFileSync(join(destination, 'outputs.py'), exportPython(outputs));
+writeFileSync(join(destination, 'outputs.py'), exportPython(outputs, { embeddedRuntime: true }));
 
 const creation = createProject('Creation helpers');
 script(creation, 'start', `board = new_instance("silicon.Stage2D", "board", game, 6, 4)
@@ -70,4 +70,9 @@ else:
 assert parent is game
 print("created", player.name, score.value)
 `);
-writeFileSync(join(destination, 'creation.py'), exportPython(creation));
+writeFileSync(join(destination, 'creation.py'), exportPython(creation, { embeddedRuntime: true }));
+
+const warned = createProject('Warnings');
+script(warned, 'start', 'warning("Careful")');
+writeFileSync(join(destination, 'warning.py'), exportPython(warned, { embeddedRuntime: true }));
+writeFileSync(join(destination, 'nitrogen.py'), exportPython(warned));

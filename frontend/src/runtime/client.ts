@@ -4,7 +4,7 @@ import { browserAnalyze, browserCommand, browserRun, browserStatus } from './bro
 const browserRuntime = import.meta.env?.PROD || import.meta.env?.VITE_ACTWRIGHT_BROWSER_RUNTIME === '1';
 export type RuntimeStatus = 'disconnected' | 'starting' | 'running' | 'paused' | 'stopped' | 'error';
 export interface InputPrompt { requestId: string; prompt: string }
-export interface RuntimeEvent { sequence: number; runId: string | null; kind: 'log' | 'status' | 'input_request' | 'input_resolved'; message?: string; level?: 'info' | 'error'; status?: RuntimeStatus }
+export interface RuntimeEvent { sequence: number; runId: string | null; kind: 'log' | 'status' | 'input_request' | 'input_resolved'; message?: string; level?: 'info' | 'warning' | 'error'; status?: RuntimeStatus }
 export interface RuntimeSnapshot { status: RuntimeStatus; runId: string | null; sequence: number; events: RuntimeEvent[]; pendingInput?: InputPrompt | null; token?: string }
 let token: string | null = null;
 async function request<T>(path: string, payload?: unknown): Promise<T> {

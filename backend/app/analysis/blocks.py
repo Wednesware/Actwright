@@ -48,17 +48,33 @@ class Converter:
         if isinstance(node, ast.Constant):
             if node.value is None: return block('none')
             if type(node.value) is bool: return block('boolean', {'VALUE': str(node.value)})
-            if type(node.value) in (int, float): return block('number', {'NUM': self.text(node)})
+            if type(node.value) in (int, float): return block('int' if type(node.value) is int else 'float', {'NUM': self.text(node)})
             if isinstance(node.value, str) and '\n' not in node.value and '\r' not in node.value: return block('text', {'TEXT': node.value})
         elif isinstance(node, ast.Name): return block('name', {'NAME': node.id})
         elif isinstance(node, ast.BinOp): return block('binary', {'OP': OPS[type(node.op)]}, {'LEFT': self.expr(node.left), 'RIGHT': self.expr(node.right)})
-        elif isinstance(node, ast.BoolOp):
-            value = self.expr(node.values[0])
-            for item in node.values[1:]: value = block('binary', {'OP': OPS[type(node.op)]}, {'LEFT': value, 'RIGHT': self.expr(item)})
-            return value
-        elif isinstance(node, ast.Compare) and len(node.ops) == 1: return block('binary', {'OP': OPS[type(node.ops[0])]}, {'LEFT': self.expr(node.left), 'RIGHT': self.expr(node.comparators[0])})
+        elif isinstance(node, ast.BoolOp) and len(node.values) <= 20:
+            fields = {'OP': OPS[type(node.op)], 'COUNT': len(node.values)}
+            fields.update({f'OP{i}': OPS[type(node.op)] for i in range(2, len(node.values))})
+            inputs = {'LEFT': self.expr(node.values[0]), 'RIGHT': self.expr(node.values[1])}
+            inputs.update({f'ITEM{i}': self.expr(item) for i, item in enumerate(node.values[2:], 2)})
+            return block('binary', fields, inputs, {'items': len(node.values)})
+        elif isinstance(node, ast.Compare) and len(node.ops) < 20:
+            fields = {'OP': OPS[type(node.ops[0])], 'COUNT': len(node.ops) + 1}
+            fields.update({f'OP{i}': OPS[type(op)] for i, op in enumerate(node.ops[1:], 2)})
+            inputs = {'LEFT': self.expr(node.left), 'RIGHT': self.expr(node.comparators[0])}
+            inputs.update({f'ITEM{i}': self.expr(item) for i, item in enumerate(node.comparators[1:], 2)})
+            return block('binary', fields, inputs, {'items': len(node.ops) + 1})
         elif isinstance(node, ast.UnaryOp): return block('unary', {'OP': OPS[type(node.op)]}, {'VALUE': self.expr(node.operand)})
-        elif isinstance(node, ast.Attribute): return block('attribute', {'NAME': node.attr}, {'OBJECT': self.expr(node.value)})
+        elif isinstance(node, ast.Attribute):
+            names = []
+            current = node
+            while isinstance(current, ast.Attribute):
+                names.insert(0, current.attr)
+                current = current.value
+            if len(names) < 20:
+                fields = {'NAME': names[0], 'COUNT': len(names) + 1}
+                fields.update({f'NAME{i+1}': name for i, name in enumerate(names[1:], 1)})
+                return block('attribute', fields, {'OBJECT': self.expr(current)}, {'items': len(names) + 1})
         elif isinstance(node, ast.Subscript): return block('index', inputs={'OBJECT': self.expr(node.value), 'KEY': self.expr(node.slice)})
         elif isinstance(node, ast.Slice): return block('slice', inputs={'START': self.expr(node.lower), 'STOP': self.expr(node.upper), 'STEP': self.expr(node.step)})
         elif isinstance(node, ast.Call):
@@ -74,8 +90,8 @@ class Converter:
                         return block(node.func.id, {'TYPE': node.args[0].value}, inputs)
             if isinstance(node.func, ast.Name) and node.func.id == 'input' and len(node.args) == 1 and not node.keywords and not isinstance(node.args[0], ast.Starred):
                 return block('input', inputs={'PROMPT': self.expr(node.args[0])})
-            if self.nitrogen_require and isinstance(node.func, ast.Name) and node.func.id == 'require' and 1 <= len(node.args) <= 2 and not node.keywords and not any(isinstance(value, ast.Starred) for value in node.args):
-                return block('require', inputs={'PUB': self.expr(node.args[0]), 'REL': self.expr(node.args[1]) if len(node.args) == 2 else None})
+            if self.nitrogen_require and isinstance(node.func, ast.Name) and node.func.id == 'require' and 1 <= len(node.args) <= 2 and not node.keywords and all(isinstance(value, ast.Constant) and isinstance(value.value, str) for value in node.args):
+                return block('require', {'PUB': node.args[0].value, 'REL': node.args[1].value if len(node.args) == 2 else ''})
             args = [self.expr(item) for item in node.args]
             args.extend(block('keyword', {'NAME': item.arg}, {'VALUE': self.expr(item.value)}) if item.arg else block('unpack', {'OP': '**'}, {'VALUE': self.expr(item.value)}) for item in node.keywords)
             if len(args) <= 20: return block('call', inputs={'FUNCTION': self.expr(node.func), 'ARGS': self.args(args)})
@@ -127,7 +143,7 @@ class Converter:
         nodes = getattr(node, name)
         if not nodes: return None
         beginning = nodes[0].lineno - 1
-        for index in range(nodes[0].lineno - 2, node.lineno - 2, -1):
+        for index in range(nodes[0].lineno - 2, getattr(node, 'lineno', nodes[0].lineno - 1) - 2, -1):
             line = self.lines[index].strip()
             if line and not line.startswith('#'):
                 beginning = index + 1
@@ -146,8 +162,8 @@ class Converter:
                 values = [self.expr(item) for item in node.value.args[1:]]
                 values.extend(block('keyword', {'NAME': item.arg}, {'VALUE': self.expr(item.value)}) if item.arg else block('unpack', {'OP': '**'}, {'VALUE': self.expr(item.value)}) for item in node.value.keywords)
                 if len(values) <= 20: return block('output', {'NAME': node.value.args[0].value}, {'ARGS': self.args(values) if values else None})
-            if isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Name) and node.value.func.id == 'print' and len(node.value.args) == 1 and not node.value.keywords:
-                return block('print', inputs={'VALUE': self.expr(node.value.args[0])})
+            if isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Name) and node.value.func.id in ('print', 'warning') and len(node.value.args) == 1 and not node.value.keywords:
+                return block(node.value.func.id, inputs={'VALUE': self.expr(node.value.args[0])})
             return block('expression', inputs={'VALUE': self.expr(node.value)})
         if isinstance(node, ast.Assign) and len(node.targets) == 1: return block('assign', inputs={'TARGET': self.expr(node.targets[0]), 'VALUE': self.expr(node.value)})
         if isinstance(node, ast.AnnAssign): return block('annotated', inputs={'TARGET': self.expr(node.target), 'TYPE': self.expr(node.annotation), 'VALUE': self.expr(node.value)})
@@ -156,6 +172,14 @@ class Converter:
             return block('if' if isinstance(node, ast.If) else 'while', inputs={'CONDITION': self.expr(node.test), 'BODY': self.nested(node), 'ELSE': self.nested(node, 'orelse')})
         if isinstance(node, (ast.For, ast.AsyncFor)):
             return block('for', {'ASYNC': 'TRUE' if isinstance(node, ast.AsyncFor) else 'FALSE'}, {'TARGET': self.expr(node.target), 'ITERABLE': self.expr(node.iter), 'BODY': self.nested(node), 'ELSE': self.nested(node, 'orelse')})
+        if isinstance(node, ast.Match):
+            cases = []
+            previous = node.lineno
+            for item in node.cases:
+                cases.extend(self.comments(previous, item.pattern.lineno - 1, node.col_offset + 4))
+                cases.append(block('case', {'PATTERN': ast.unparse(item.pattern)}, {'GUARD': self.expr(item.guard), 'BODY': self.nested(item)}))
+                previous = item.body[-1].end_lineno
+            return block('match', inputs={'VALUE': self.expr(node.subject), 'CASES': chain(cases)})
         if isinstance(node, ast.Return): return block('return', inputs={'VALUE': self.expr(node.value)})
         if isinstance(node, (ast.Break, ast.Continue, ast.Pass)): return block('flow', {'OP': type(node).__name__.lower()})
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and not getattr(node, 'type_params', []):
@@ -164,6 +188,12 @@ class Converter:
             bases = [ast.unparse(value) for value in node.bases] + [f'{value.arg}={ast.unparse(value.value)}' if value.arg else '**' + ast.unparse(value.value) for value in node.keywords]
             return block('class', {'NAME': node.name, 'BASES': ', '.join(bases)}, {'BODY': self.nested(node, end=node.end_lineno)})
         if isinstance(node, (ast.Import, ast.ImportFrom)):
+            if len(node.names) == 1:
+                item = node.names[0]
+                fields = {'MODULE': '.' * node.level + (node.module or '') if isinstance(node, ast.ImportFrom) else item.name}
+                if isinstance(node, ast.ImportFrom): fields['NAMES'] = item.name
+                if item.asname: fields['ALIAS'] = item.asname
+                return block(('import_from' if isinstance(node, ast.ImportFrom) else 'import_module') + ('_as' if item.asname else ''), fields)
             names = ', '.join(item.name + (' as ' + item.asname if item.asname else '') for item in node.names)
             return block('import', {'KIND': 'from' if isinstance(node, ast.ImportFrom) else 'import', 'MODULE': '.' * node.level + (node.module or '') if isinstance(node, ast.ImportFrom) else '', 'NAMES': names})
         if isinstance(node, ast.Try):

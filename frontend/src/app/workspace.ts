@@ -26,7 +26,7 @@ export interface WorkspaceState {
   saveError: string | null;
   projects: { id: string; name: string; updatedAt: string }[];
   diagnostics: Diagnostic[];
-  logs: { id: string; message: string; level: 'info' | 'error'; time: string }[];
+  logs: { id: string; message: string; level: 'info' | 'warning' | 'error'; time: string }[];
   theme: 'dark' | 'light';
   accent: string;
   sound: SoundPreferences;
@@ -49,7 +49,7 @@ export class Workspace {
   getSnapshot = (): WorkspaceState => this.#state;
   subscribe = (listener: () => void): (() => void) => { this.#listeners.add(listener); return () => { this.#listeners.delete(listener); }; };
   #set(update: Partial<WorkspaceState>): void { this.#state = { ...this.#state, ...update }; this.#listeners.forEach(listener => listener()); }
-  log = (message: string, level: 'info' | 'error' = 'info'): void => {
+  log = (message: string, level: 'info' | 'warning' | 'error' = 'info'): void => {
     this.#set({ logs: [...this.#state.logs.slice(-99), { id: crypto.randomUUID(), message, level, time: new Date().toLocaleTimeString() }] });
   };
   async initialize(): Promise<void> {
@@ -239,14 +239,14 @@ export class Workspace {
     if (!saved) throw new Error('Could not save the checked script. See the console for the Act validation error.');
     return result.program !== null;
   }
-  async pythonSource(): Promise<string> {
+  async pythonSource(embeddedRuntime = false): Promise<string> {
     const id = this.#state.project?.id;
     if (!id) throw new Error('No Act is open.');
     for (const script of Object.values(this.#state.project!.scripts)) {
       if (script.draft && !await this.checkScript(script.id)) throw new Error(`Fix the Python draft in “${script.name}” before running/exporting.`);
     }
     if (this.#state.project?.id !== id) throw new Error('The open Act changed. Try again.');
-    return exportPython(this.#state.project);
+    return exportPython(this.#state.project, { embeddedRuntime });
   }
   async downloadPython(): Promise<void> {
     try {

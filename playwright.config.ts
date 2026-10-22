@@ -5,6 +5,7 @@ const runtimePort = Number(process.env['ACTWRIGHT_RUNTIME_PORT'] ?? 8765);
 const baseURL = `http://127.0.0.1:${port}`;
 export default defineConfig({
   testDir: './tests/browser',
+  outputDir: './test-results/browser',
   timeout: 30_000,
   fullyParallel: false,
   reporter: [['list'], ['json', { outputFile: 'test-results/browser-results.json' }]],

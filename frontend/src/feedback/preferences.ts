@@ -1,5 +1,5 @@
 export interface SoundPreferences { muted: boolean; volume: number }
-export const defaultSound: SoundPreferences = { muted: false, volume: 0.18 };
+export const defaultSound: SoundPreferences = { muted: false, volume: 0.5 };
 export function readSound(value: unknown): SoundPreferences {
   try {
     const data = typeof value === 'string' ? JSON.parse(value) : value;
