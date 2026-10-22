@@ -1,4 +1,4 @@
-# Actwright
+# Actwright™
 
 A local-first visual development environment for the Wednesware Silicon Python
 game framework. The [approved architecture](ACTWRIGHT_ARCHITECTURE.md) and
