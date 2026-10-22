@@ -168,3 +168,29 @@ test('component creation blocks use runtime helpers with parent, ID and construc
     assert.equal(expression({ type: `act_l${level}_new_singleton`, fields: { TYPE: 'silicon.Score' } }), 'new_singleton("silicon.Score", game)');
   }
 });
+
+test('unified connections execute lifecycle → script → script → component trigger', async () => {
+  const { reconcileScriptOutputs } = await import('../../frontend/src/core/project/script-outputs.ts');
+  const { spawnSync } = await import('node:child_process');
+  const { existsSync } = await import('node:fs');
+  const silicon = process.env['SILICON_SOURCE'] ?? '/tmp/actwright-silicon';
+  if (!existsSync(`${silicon}/silicon/__init__.py`)) return;
+  const project = createProject('Unified connections');
+  const entity = addComponent(project, builtins(), 'silicon.Entity', { aliases: ['player'], config: { name: 'Player' } });
+  const first = addScript(project, project.game.id, 'start', 'emit("next", 7)'); checked(project, first);
+  const second = addScript(project, project.game.id, 'start', 'print("CHAIN", value)\nemit("spawn")'); checked(project, second);
+  project.scripts[second]!.parameters = [{ name: 'value', kind: 'positionalOrKeyword', annotation: null, default: { kind: 'missing' } }];
+  reconcileScriptOutputs(project, first, project.scripts[first]!.synchronizedSource, ['next']);
+  reconcileScriptOutputs(project, second, project.scripts[second]!.synchronizedSource, ['spawn']);
+  project.triggerRules = [];
+  project.slotEdges.push(
+    { id: 'start-wire', sourceId: project.game.id, output: 'start', targetId: first, input: 'run', enabled: true },
+    { id: 'script-wire', sourceId: first, output: 'next', targetId: second, input: 'run', enabled: true },
+    { id: 'trigger-wire', sourceId: second, output: 'spawn', targetId: entity, input: 'spawn', enabled: true },
+  );
+  assert.deepEqual(validateProject(project, builtins()).filter(d => d.severity === 'error'), []);
+  const restored = (await importAct(await exportAct(project))).project;
+  const result = spawnSync('python3', ['-c', `${exportPython(restored).replace('if __name__ == "__main__":', 'if False:')}\ng = build_game()\ng.start()\nassert g[g.actwright_components[${pythonLiteral(entity)}]].state.spawned\ng.stop()\n`], { encoding: 'utf-8', env: { ...process.env, PYTHONPATH: silicon } });
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /CHAIN 7/);
+});

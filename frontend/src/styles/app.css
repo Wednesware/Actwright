@@ -177,11 +177,9 @@ small{font-size:11px;color:var(--muted)}
 .node-port small{font-size:8px;display:block;color:var(--muted);margin-top:4px;overflow:hidden;text-overflow:ellipsis}
 .node-port.output{text-align:right}
 .node-port.hierarchy,.node-port.link{color:var(--muted);font-size:9px;opacity:.65}
-.node-port.trigger>.port-label{color:var(--trigger)}
 .node-port>span:not(.port-label){display:flex;overflow:visible;flex-shrink:0}
 .act-socket{flex-shrink:0;width:9px;height:9px;border-radius:50%;border:2px solid var(--signal);background:var(--panel);cursor:crosshair;box-shadow:0 0 0 5px transparent}
 .act-socket:hover{background:var(--signal);box-shadow:0 0 0 5px color-mix(in srgb,var(--signal) 20%,transparent)}
-.act-socket.trigger{border-color:var(--trigger);border-radius:2px;transform:rotate(45deg)}
 .act-socket.hierarchy{border-color:var(--green)}
 .act-socket.link{border-color:var(--link)}
 .node-summary{padding:10px 14px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:7px}
@@ -189,7 +187,6 @@ small{font-size:11px;color:var(--muted)}
 .node-summary code{font-size:9px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .graph-wire{overflow:visible;position:absolute;pointer-events:none;width:9999px;height:9999px;top:0;left:0}
 .graph-wire path{stroke:var(--signal);stroke-width:2px;fill:none;pointer-events:stroke;cursor:pointer}
-.graph-wire.trigger path{stroke:var(--trigger);stroke-dasharray:6 4}
 .graph-wire.hierarchy path{stroke:var(--green);stroke-width:1px;opacity:.3}
 .graph-wire.link path{stroke:var(--link);stroke-width:1.5px;stroke-dasharray:3 5;opacity:.5}
 .graph-wire path:hover{stroke-width:4px;opacity:1}

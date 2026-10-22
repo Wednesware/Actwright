@@ -92,12 +92,18 @@ export function validateProject(project: ActProject, registry: ComponentRegistry
   for (const edge of project.slotEdges) {
     unique(edge.id);
     const source = project.instances[edge.sourceId], target = project.instances[edge.targetId];
-    const script = project.scripts[edge.sourceId];
-    if ((!source && !script) || !target) { issue('connection.target', edge.id, 'Connection references missing instance'); continue; }
-    const output = script ? scriptOutputNames(project, script.id).includes(edge.output) ? scriptOutputMember(edge.output) : undefined : definition(source!.typeId)?.members.find(m => m.name === edge.output && m.kind === 'output');
-    const input = definition(target.typeId)?.members.find(m => m.name === edge.input && m.kind === 'input');
-    if ((!script && !definition(source!.typeId)) || !definition(target.typeId)) continue;
+    const script = project.scripts[edge.sourceId], callback = project.scripts[edge.targetId];
+    const gameSource = edge.sourceId === project.game.id;
+    if ((!source && !script && !gameSource) || (!target && !callback)) { issue('connection.target', edge.id, 'Connection references missing endpoint'); continue; }
+    const output = script ? scriptOutputNames(project, script.id).includes(edge.output) ? scriptOutputMember(edge.output) : undefined
+      : gameSource ? ['start', 'pause', 'resume', 'stop'].includes(edge.output) ? scriptOutputMember(edge.output) : undefined
+      : definition(source!.typeId)?.members.find(m => m.name === edge.output && ['output', 'trigger'].includes(m.kind));
+    const input = callback ? edge.input === 'run' ? scriptOutputMember('run') : undefined
+      : definition(target!.typeId)?.members.find(m => m.name === edge.input && ['input', 'trigger'].includes(m.kind));
+    if ((!script && !gameSource && !definition(source!.typeId)) || (!callback && !definition(target!.typeId))) continue;
     if (!input || !output) { issue('connection.member', edge.id, 'Connection references missing input/output'); continue; }
+    // Trigger and script callbacks use Silicon's callable connection protocol.
+    if (callback || gameSource || output.kind === 'trigger' || input.kind === 'trigger') continue;
     const result = validateConnection(output, input, project.game.validation);
     for (const message of result.warnings) issue('connection.type', edge.id, message, result.allowed ? 'warning' : 'error');
   }
