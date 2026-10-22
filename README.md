@@ -6,6 +6,8 @@ A local-first visual development environment for the Wednesware Silicon Python
 game framework. The [approved architecture](ACTWRIGHT_ARCHITECTURE.md) and
 [specification](ACTWRIGHT_INFO.md) describe the full application.
 
+**UPDATE: You can now open Actwright directly in your browser at `actwright.wednesware.org` with working web-based Python support and everything!**
+
 ## Run the browser workspace
 
 ```sh
