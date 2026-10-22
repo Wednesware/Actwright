@@ -1,0 +1,57 @@
+import { expect, test } from '@playwright/test';
+
+test('static site analyzes Python, runs Silicon, accepts console input, and interrupts runaway code', async ({ page }) => {
+  const errors: string[] = [];
+  const apiRequests: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  page.on('request', request => { if (new URL(request.url()).pathname.startsWith('/api/')) apiRequests.push(request.url()); });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Scripts', exact: true }).click();
+  await page.getByRole('button', { name: 'Script', exact: true }).first().click();
+  await page.getByRole('dialog').getByRole('button', { name: 'Script', exact: true }).click();
+  await page.getByRole('button', { name: 'Run', exact: true }).click();
+  await expect(page.locator('.console-line p', { hasText: /^hello$/ })).toHaveCount(1, { timeout: 120_000 });
+  await page.getByRole('button', { name: 'Pause game', exact: true }).click();
+  await expect(page.locator('.runtime-status')).toContainText('paused');
+  await page.getByRole('button', { name: 'Resume game', exact: true }).click();
+  await expect(page.locator('.runtime-status')).toContainText('running');
+  await page.getByRole('button', { name: 'Restart game', exact: true }).click();
+  await expect(page.locator('.console-line p', { hasText: /^hello$/ })).toHaveCount(2, { timeout: 120_000 });
+  await page.getByRole('button', { name: 'Stop game', exact: true }).click();
+
+  await page.getByRole('button', { name: '3 · Python', exact: true }).click();
+  const editor = page.getByRole('textbox', { name: 'Python script', exact: true });
+  await editor.press('ControlOrMeta+A');
+  await page.keyboard.insertText('if :');
+  await page.getByRole('button', { name: 'Check Python', exact: true }).click();
+  await expect(page.locator('.script-feedback')).toContainText('Line 1:', { timeout: 120_000 });
+  await editor.press('ControlOrMeta+A');
+  await page.keyboard.insertText('while True: pass');
+  await page.getByRole('button', { name: 'Check Python', exact: true }).click();
+  await expect(page.locator('.script-feedback')).toContainText('Ready to run');
+  await page.getByRole('button', { name: 'Run', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Stop game', exact: true })).toBeEnabled({ timeout: 120_000 });
+  await page.getByRole('button', { name: 'Stop game', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Run', exact: true })).toBeEnabled();
+
+  await page.locator('input[type=file]').setInputFiles('examples/interactive-player-board.act');
+  await expect(page.getByText(/Imported interactive-player-board.act/)).toBeVisible();
+  await page.getByRole('button', { name: 'Run', exact: true }).click();
+  const prompt = page.getByRole('form', { name: 'Python input prompt' });
+  await expect(prompt).toContainText('New entity ID:', { timeout: 120_000 });
+  await page.getByRole('textbox', { name: 'Terminal input', exact: true }).fill('friend');
+  await prompt.getByRole('button', { name: 'Submit', exact: true }).click();
+  await expect(prompt).toContainText('New entity name:');
+  await page.getByRole('textbox', { name: 'Terminal input', exact: true }).fill('Nova');
+  await prompt.getByRole('button', { name: 'Submit', exact: true }).click();
+  await expect(page.locator('.console-line p', { hasText: 'Created entity ID: friend | name: Nova' })).toBeVisible();
+  await expect(prompt).toHaveCount(0);
+  await page.getByRole('button', { name: 'Restart game', exact: true }).click();
+  await expect(prompt).toContainText('New entity ID:', { timeout: 120_000 });
+  await page.getByRole('button', { name: 'Stop game', exact: true }).click();
+  await expect(prompt).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Run', exact: true })).toBeEnabled();
+  expect(apiRequests).toEqual([]);
+  expect(errors).toEqual([]);
+  await expect(page.locator('.console-line.error')).toHaveCount(0);
+});

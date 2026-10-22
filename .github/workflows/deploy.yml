@@ -30,9 +30,15 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Fetch verified Silicon sources
+        run: python3 scripts/fetch_silicon.py /tmp/actwright-silicon
 
       - name: Build Actwright
         run: npm run build

@@ -1,5 +1,7 @@
 import type { PythonWorkspace } from '../scripting/blocks.ts';
 import type { Program } from '../core/ir/model.ts';
+import { browserAnalyze, browserCommand, browserRun, browserStatus } from './browser.ts';
+const browserRuntime = import.meta.env?.PROD || import.meta.env?.VITE_ACTWRIGHT_BROWSER_RUNTIME === '1';
 export type RuntimeStatus = 'disconnected' | 'starting' | 'running' | 'paused' | 'stopped' | 'error';
 export interface InputPrompt { requestId: string; prompt: string }
 export interface RuntimeEvent { sequence: number; runId: string | null; kind: 'log' | 'status' | 'input_request' | 'input_resolved'; message?: string; level?: 'info' | 'error'; status?: RuntimeStatus }
@@ -15,18 +17,22 @@ async function request<T>(path: string, payload?: unknown): Promise<T> {
   return data;
 }
 export async function runtimeStatus(after = 0): Promise<RuntimeSnapshot> {
+  if (browserRuntime) return browserStatus(after);
   try { const result = await request<RuntimeSnapshot>(`/api/runtime?after=${after}`); token = result.token ?? null; return result; }
   catch { token = null; throw new Error('Python runtime unavailable. Start npm run runtime in another terminal, then try again.'); }
 }
 export async function analyzeScript(source: string): Promise<{ program: Program | null; blocks?: PythonWorkspace | null; outputs?: string[]; diagnostics: string[]; line?: number; column?: number }> {
+  if (browserRuntime) return browserAnalyze(source);
   if (!token) await runtimeStatus();
   return request('/api/analyze-script', { source });
 }
 export async function runPython(source: string): Promise<RuntimeSnapshot> {
+  if (browserRuntime) return browserRun(source);
   await runtimeStatus();
   return request('/api/runtime/run', { source });
 }
 export async function runtimeCommand(action: 'pause' | 'resume' | 'stop' | 'input' | 'input_reply', runId: string, data: Record<string, string> = {}): Promise<RuntimeSnapshot> {
+  if (browserRuntime) return browserCommand(action, runId, data);
   if (!token) await runtimeStatus();
   return request(`/api/runtime/${action}`, { ...data, runId });
 }
