@@ -11,10 +11,12 @@
     "check:metadata": "python3 scripts/generate_metadata.py --check",
     "check": "npm run typecheck && npm test && npm run test:python",
     "schemas": "python3 scripts/generate_schemas.py",
+    "prepare:browser": "python3 scripts/prepare_browser_runtime.py",
     "dev": "vite --host 127.0.0.1",
-    "build": "npm run typecheck && vite build",
+    "build": "npm run prepare:browser && npm run typecheck && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test:browser": "playwright test",
+    "test:static": "playwright test --config playwright.static.config.ts",
     "runtime": "python3 -m backend.app.runtime.server"
   },
   "devDependencies": {

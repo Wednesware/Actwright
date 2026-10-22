@@ -28,7 +28,18 @@ save-as-new-Act actions instead of silently overwriting the saved project.
 
 ## Write scripts and run a game
 
-Start the Python companion in another terminal:
+The published GitHub Pages site runs Python and the pinned Silicon framework in
+your browser using Pyodide. Visitors do not need Python or a companion server.
+The first script check or Run downloads Python from jsDelivr; subsequent loads
+can use the browser cache. Run, Pause/Resume, Restart, script checking, and console
+`input()` are available. Console input requires service workers (HTTPS or localhost).
+Each game runs in a separate worker, so Stop can interrupt an infinite loop.
+Reloading or leaving the page ends that tab's game; the editable Act stays saved.
+Console prompts time out after five minutes. Native OS integrations and Python
+packages with unsupported native extensions require the local companion instead.
+
+For local development (`npm run dev`), start the native Python companion in
+another terminal:
 
 ```sh
 npm run runtime
@@ -73,11 +84,11 @@ collections/slicing/comprehensions, imports, and exception/resource handling.
 Level 1 describes actions ("Show a message:"); Level 2 uses Python notation
 (`print (…)`). They share canonical block types and behavior. Level 3 is Monaco
 Python with highlighting, completion, find/folding and syntax diagnostics.
-Switching back to blocks uses the companion's non-executing AST converter.
+Switching back to blocks uses the same non-executing AST converter in browser Python or the local companion.
 Unsupported syntax stays in existing preserved-source blocks, which are never
 listed in the Level 1 or 2 toolbox. Blockly follows the active light/dark theme.
 
-The companion checks syntax without executing code; only Run executes the game.
+Script checking validates syntax without executing code; only Run executes the game.
 The **Components** Blockly category includes **New instance of … with ID … in parent**
 and **New singleton … in parent** in levels 1 and 2. Both return a reference you can
 store in a variable, connect to another block, or use to access component methods.
@@ -127,7 +138,8 @@ it; the component itself is preserved. Undo restores the relationships.
 **Messages → Ask for text** calls Python’s standard `input(prompt)`. During Run,
 Actwright shows the prompt and a **Submit** field in its Console, including during
 game startup. The game waits for the reply; Stop and Restart remain available.
-Prompts survive a browser reload. Exported `.py` files read from the normal terminal.
+With the local companion, prompts survive a browser reload. Exported `.py` files
+read from the normal terminal.
 
 Import [`examples/interactive-player-board.act`](examples/interactive-player-board.act)
 and press Run to try it: the initial board prints, then asks for a new entity ID
@@ -139,7 +151,8 @@ game; restarting begins with the saved project’s initial entities.
 Edits are saved automatically, including invalid and offline Python drafts. Run
 and Python export check pending drafts and refuse invalid code. A game keeps using
 the code it started with until restarted. Opening another Act stops the previous
-run. Execution uses local Python with your user permissions; run Acts you trust.
+run. The local companion executes Python with your user permissions; run Acts you trust.
+Browser execution uses a worker with browser permissions, including network access.
 
 **Save .act** downloads the complete editable project, scripts/drafts, graph,
 block layouts and assets. **Export .py** downloads runnable Silicon Python; it
@@ -162,6 +175,17 @@ block representation, such as match/case, retain their original source.
 npm run build
 npm run preview
 ```
+
+Building packages the verified Silicon checkout into the static artifact. Use
+`../si`, `SILICON_SOURCE`, or `/tmp/actwright-silicon` as described below. The Pages
+workflow fetches and verifies the pinned checkout before building. The default
+asset base is `/` for `actwright.wednesware.org`; set `ACTWRIGHT_BASE=/Actwright/`
+when deploying at the repository path instead. To exercise browser Python during
+development, run `npm run prepare:browser` then
+`VITE_ACTWRIGHT_BROWSER_RUNTIME=1 npm run dev`.
+
+`npm run test:static` tests the production artifact without a Python server. It
+requires a preceding build, Chromium, and network access to the Pyodide CDN.
 
 ## Development
 
@@ -189,8 +213,9 @@ An existing compatible Chromium binary can be selected with `ACTWRIGHT_CHROMIUM`
 
 ## Verified Silicon checkout
 
-Silicon is not vendored or bundled. To execute framework compatibility tests and
-regenerate metadata, download the exact pinned files to a development directory:
+Silicon is not vendored in this repository. Static builds bundle verified sources
+so visitors can run games in the browser. To build, execute framework compatibility
+tests, or regenerate metadata, download the exact pinned files to a development directory:
 
 ```sh
 python3 scripts/fetch_silicon.py /tmp/actwright-silicon
