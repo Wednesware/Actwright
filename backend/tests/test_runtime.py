@@ -205,6 +205,38 @@ class ExportIntegrationTests(unittest.TestCase):
     def load(self, name):
         import runpy
         return runpy.run_path(str(Path(self.directory.name) / name), run_name='export_test')['build_game']
+    def test_downloaded_export_loads_silicon_through_nitrogen_and_emits_warning(self):
+        import sys
+        import types
+        import warnings
+        from unittest.mock import patch
+        import silicon
+        calls = []
+        nitrogen = types.ModuleType('nitrogen')
+        def require(publication):
+            calls.append(publication)
+            return silicon
+        nitrogen.require = require
+        with patch.dict(sys.modules, {'nitrogen': nitrogen}):
+            factory = self.load('nitrogen.py')
+        self.assertEqual(calls, ['si'])
+        with warnings.catch_warnings(record=True) as messages:
+            game = factory()
+            game.start()
+            game.stop()
+        self.assertEqual([str(message.message) for message in messages], ['Careful'])
+        source = (Path(self.directory.name) / 'warning.py').read_text()
+        runtime = Runtime(SOURCE)
+        try:
+            runtime.start(source)
+            deadline = time.monotonic() + 3
+            while time.monotonic() < deadline:
+                if any(event.get('level') == 'warning' and event.get('message') == 'Careful' for event in runtime.snapshot()['events']): break
+                time.sleep(0.01)
+            else: self.fail('Warning did not reach the runtime event stream')
+        finally:
+            runtime.stop()
+
     def test_exported_startup_pause_resume_stop_and_fresh_restart(self):
         from contextlib import redirect_stdout
         output = io.StringIO()
@@ -271,7 +303,14 @@ class ExportIntegrationTests(unittest.TestCase):
         import runpy
         from backend.app.runtime.server import ROOT
         from silicon import Stage2D, Entity
-        factory = runpy.run_path(str(ROOT / 'examples/interactive-player-board.py'), run_name='example_check')['build_game']
+        import sys
+        from types import ModuleType
+        from unittest.mock import patch
+        import silicon
+        nitrogen = ModuleType('nitrogen')
+        nitrogen.require = lambda publication: silicon if publication == 'si' else None
+        with patch.dict(sys.modules, {'nitrogen': nitrogen}):
+            factory = runpy.run_path(str(ROOT / 'examples/interactive-player-board.py'), run_name='example_check')['build_game']
         game = factory()
         output = io.StringIO()
         with patch('builtins.input', side_effect=['player', 'friend', '', 'Nova']), redirect_stdout(output):

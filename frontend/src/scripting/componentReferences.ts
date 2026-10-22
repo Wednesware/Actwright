@@ -50,5 +50,5 @@ export function setComponentReferences(workspace: Blockly.WorkspaceSvg, refs: Co
   if (selected?.getId() === 'actwright-components') workspace.getToolbox()?.refreshSelection();
 }
 export function installComponentCategory(workspace: Blockly.WorkspaceSvg, level: 1 | 2): void {
-  workspace.registerToolboxCategoryCallback('ACTWRIGHT_COMPONENTS', () => [...context(workspace).map(ref => ({ kind: 'block', type: `act_l${level}_component`, fields: { ID: ref.id }, extraState: { componentId: ref.id } })), { kind: 'label', text: 'Create a component' }, ...['instance', 'singleton'].map(kind => ({ kind: 'block', type: `act_l${level}_new_${kind}`, fields: { TYPE: 'silicon.Entity' } }))]);
+  workspace.registerToolboxCategoryCallback('ACTWRIGHT_COMPONENTS', () => [{ kind: 'block', type: `act_l${level}_output` }, ...context(workspace).map(ref => ({ kind: 'block', type: `act_l${level}_component`, fields: { ID: ref.id }, extraState: { componentId: ref.id } })), { kind: 'label', text: 'Create a component' }, ...['instance', 'singleton'].map(kind => ({ kind: 'block', type: `act_l${level}_new_${kind}`, fields: { TYPE: 'silicon.Entity' } }))]);
 }

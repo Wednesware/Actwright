@@ -25,6 +25,11 @@ class Normalize(ast.NodeTransformer):
 class PythonBlockTests(unittest.TestCase):
     def test_common_python_statements_and_expressions_roundtrip_through_production_generator(self):
         sources = [
+            'import math\nfrom math import sqrt\nimport math as maths\nfrom math import sqrt as root',
+            'a = 0xFF\nb = 123456789012345678901234567890\nc = 1.\nd = .25\ne = 1e-9\nf = 1_000.5',
+            'flag = a < b <= c is not None\nvalue = a.b.c.d\nwarning("careful")',
+            'match value:\n    case {"x": x} if x > 0:\n        print(x)\n    case [a, *rest]:\n        pass\n    case 1 | 2:\n        pass\n    case _:\n        print("other")',
+
             'player = new_instance("silicon.Entity", "player", game, name="Nova")\nscore = new_singleton("silicon.Score", player)\nboard = new_instance("silicon.Stage2D", "board", parent, 6, 4)', 
             'identifier = input("Entity ID: ").strip()\nname = input("Name: ")\nempty = input()',
             'emit("points", 3)\nemit("place", "player", 2, y=4)\nemit("result")',
@@ -108,7 +113,7 @@ def outer():
         sources = [
             '# before\nif True:\n    # inside\n    print("yes")\n    # after body\nelse:\n    # otherwise\n    print("no")\n# end\n',
             'message = """hello\nworld"""\nprint(message)',
-            'def action():\n    match value:\n        case 1:\n            print("one")\n',
+            'def action():\n    match value:\n        # first case\n        case 1:\n            print("one")\n        # fallback\n        case _:\n            pass\n',
             'print("hello")  # keep this inline comment\n',
         ]
         for original, converted in zip(sources, generate(sources)):
@@ -116,6 +121,6 @@ def outer():
                 self.assertEqual(ast.dump(ast.parse(original)), ast.dump(ast.parse(converted)), converted)
                 for line in original.splitlines():
                     if '#' in line: self.assertIn(line.strip(), converted)
-        unsupported = source_blocks(sources[2])['blocks']['blocks'][0]
-        self.assertEqual(unsupported['type'], 'act_python')
-        self.assertEqual(unsupported['extraState']['source'], sources[2].rstrip('\n'))
+        converted = source_blocks(sources[2])['blocks']['blocks'][0]
+        self.assertEqual(converted['type'], 'act_function')
+        self.assertEqual(converted['inputs']['BODY']['block']['type'], 'act_match')

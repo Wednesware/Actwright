@@ -22,6 +22,7 @@ jobs:
           python-version: '3.12'
       - run: npm ci
       - run: python3 scripts/fetch_silicon.py /tmp/actwright-silicon
+      - run: npm run check
       - run: npm run build
       - run: npx playwright install --with-deps chromium
       - run: npm run test:static

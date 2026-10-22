@@ -54,6 +54,7 @@ self.onmessage = async ({ data }) => {
     } else if (data.action === 'run') {
       python.globals.set('actwright_source', data.source);
       await python.runPythonAsync('from actwright_browser import run\nawait run(actwright_source)');
+      self.postMessage({ finished: true });
     } else {
       python.globals.set('actwright_command', JSON.stringify(data));
       python.runPython('from actwright_browser import command\ncommand(actwright_command)');
@@ -63,6 +64,7 @@ self.onmessage = async ({ data }) => {
     else {
       send({ kind: 'log', level: 'error', message: String(error) });
       send({ kind: 'status', status: 'error' });
+      self.postMessage({ finished: true });
     }
   }
 };

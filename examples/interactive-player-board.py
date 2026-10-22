@@ -3,7 +3,8 @@
 import asyncio
 import ast
 import linecache
-import silicon as _silicon
+from nitrogen import require
+_silicon = require("si")
 
 
 def _bound_parent(game, parent, default):

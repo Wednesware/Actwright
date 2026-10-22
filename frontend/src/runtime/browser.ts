@@ -88,7 +88,7 @@ export async function browserRun(source: string): Promise<RuntimeSnapshot> {
     gameChannel.onmessage = ({ data }) => { if (state.runId === runId) event(data); };
     const worker = new Worker(new URL('python-worker.js', base));
     game = worker;
-    worker.addEventListener('message', ({ data }) => { if (data.event && game === worker) event(data.event); });
+    worker.addEventListener('message', ({ data }) => { if (game !== worker) return; if (data.event) event(data.event); if (data.finished) disposeGame(); });
     worker.addEventListener('error', () => { if (game === worker) { event({ kind: 'log', level: 'error', message: 'Browser Python failed. Check your connection and restart the game.' }); event({ kind: 'status', status: 'error' }); } });
     await rpc(worker, 'init', { base: base.href, channel });
     if (game === worker) worker.postMessage({ action: 'run', source });

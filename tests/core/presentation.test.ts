@@ -23,7 +23,7 @@ test('node sizes and script descriptions round-trip through .act and Undo', asyn
 });
 
 test('sound preferences clamp invalid values and persist mute and volume across reopening', async () => {
-  assert.deepEqual(readSound('{invalid'), { muted: false, volume: 0.18 });
+  assert.deepEqual(readSound('{invalid'), { muted: false, volume: 0.5 });
   assert.equal(readSound({ muted: true, volume: 7 }).volume, 1);
   assert.equal(readSound({ volume: -1 }).volume, 0);
   const name = `sounds-${crypto.randomUUID()}`, first = new Workspace(new ProjectRepository(name));

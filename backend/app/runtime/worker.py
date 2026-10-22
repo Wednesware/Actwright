@@ -9,6 +9,7 @@ import threading
 import time
 import traceback
 import uuid
+import warnings
 
 _protocol = sys.stdout
 _lock = threading.Lock()
@@ -97,6 +98,7 @@ def read_commands(commands, console_input, stream):
 
 
 async def run(path):
+    warnings.showwarning = lambda message, *_args, **_kwargs: emit('log', level='warning', message=str(message))
     commands = queue.Queue(maxsize=100)
     console_input = ConsoleInput()
     builtins.input = console_input.ask

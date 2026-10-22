@@ -116,13 +116,13 @@ when the event provides none); for game callbacks it is `game`. `component` is
 the triggering component, and `components` maps stable IDs to Python instances. Import any additional Python names explicitly. Restart `npm run runtime`
 after updating the companion so new conversion capabilities are loaded.
 
-**Values → Value** accepts a complete Python expression, such as
+**Variables → the blank value block** accepts a Python name or expression, such as
 `self.person.name.upper()`, anywhere a value fits. It is available in both block
 levels. **Components** lists `game`, `parent`, and every graph component with its
 icon and type. Component reference blocks retain identity when display names or
 tree aliases change.
 
-**Messages → Send output** (Level 1) / **emit** (Level 2) creates a named signal
+**Components → Send output** (Level 1) / **emit** (Level 2) creates a named signal
 socket on the Script card. Connect it to a component input by dragging a wire or
 using **Connect**. Its argument can be one value or an **Arguments** block with
 several values, named arguments, or unpacking. In Python use, for example,
@@ -160,11 +160,13 @@ Browser execution uses a worker with browser permissions, including network acce
 
 **Save .act** downloads the complete editable project, scripts/drafts, graph,
 block layouts and assets. **Export .py** downloads runnable Silicon Python; it
-uses the same generator as Run. Run a downloaded export using the pinned Silicon
-checkout on your Python path, for example:
+uses the same generator as Run, with Nitrogen module loading for standalone files.
+Install Nitrogen and Silicon, then run the export:
 
 ```sh
-PYTHONPATH=../si python3 My_Act.py
+python3 -m pip install wwn
+n2 get si
+python3 My_Act.py
 ```
 
 Press Ctrl+C to end the standalone game loop. The export defines `build_game()`
@@ -172,8 +174,9 @@ for reuse and regenerates ordered trigger connections on every fresh game.
 Additional source modules, binary assets and unsupported imported script roles
 are retained in `.act`; single-file Python export reports these unsupported cases
 instead of silently dropping them. A dedicated custom class builder, rendered grid previews, source import UI and
-full game-building lessons remain later work. Python forms without a supported
-block representation, such as match/case, retain their original source.
+full game-building lessons remain later work. Match/case has editable pattern and
+optional guard blocks. Other Python forms without a supported block representation
+retain their original source.
 
 ```sh
 npm run build
@@ -254,8 +257,41 @@ Additional signature inference warns by default; strict validation is opt-in.
 - `docs/phase-1.md`: compatibility limits and next-stage integration contract.
 
 The **Modules** toolbox includes Nitrogen's `require(pub, rel=None)` in both block
-levels. It returns a publication/module value and accepts an optional release;
+levels. Publication and release are plain text fields; enter names without quotes.
+It returns a publication/module value and accepts an optional release;
 leaving release empty uses Nitrogen's default latest release. Generated Python
 adds `from nitrogen import require` when needed. Install Nitrogen in the runtime's
 Python environment with `python3 -m pip install wwn` if it is not already present.
 The block follows the [Nitrogen API](https://github.com/Wednesware/Nitrogen/blob/9b0188f6be8b2b1a3fc9e25e71ceef8ed957b6e2/README.md).
+
+
+## Blockly and workspace controls
+
+Values offers separate **int** and **float** literals with validated text fields;
+large integers retain their exact digits. Use the blank block in Variables for
+names and other Python expressions. Older Value and Number blocks migrate when
+opened, and older dynamic require blocks keep their arguments.
+
+Functions & Classes begins with attribute, call, statement, and argument blocks.
+The **Parts** number on binary operators and attributes adds up to 20 parts;
+operator chains follow Python precedence. Modules provides four separate import
+forms: `from x import y`, `import x`, and each form with `as` aliases. Control flow
+includes `match` and `case`, with pattern text and an optional guard value.
+
+**Messages → warning** writes a WARN entry in the console. The same
+`warning(message)` helper is available in Python and standalone exports. `emit()`
+belongs to Components. Standalone exports load Silicon with
+`from nitrogen import require` and `_silicon = require("si")`; in-app execution
+uses the bundled/verified Silicon module. Browser `require("si")` and
+`require("silicon")` resolve that same bundled module; other publications and
+specific releases need the local companion with Nitrogen installed.
+
+Drag the separators beside either sidebar or above the terminal to resize them.
+Focused separators also accept Arrow keys (16 pixels), Shift + Arrow (48 pixels),
+Home, and End. Sizes are saved on this device. UI sounds have a stronger tone and
+a 50% default volume; existing volume and mute preferences remain respected.
+
+A browser Act with only synchronous startup callbacks ends automatically after
+those callbacks finish. Acts with update hooks, input/host components, or pending
+Silicon tasks retain the game loop; use `game.stop()` or Stop when their work ends.
+Completion or failure releases the browser worker and restores the Run button.

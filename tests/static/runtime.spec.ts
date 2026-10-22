@@ -11,12 +11,21 @@ test('static site analyzes Python, runs Silicon, accepts console input, and inte
   await page.getByRole('dialog').getByRole('button', { name: 'Script', exact: true }).click();
   await page.getByRole('button', { name: 'Run', exact: true }).click();
   await expect(page.locator('.console-line p', { hasText: /^hello$/ })).toHaveCount(1, { timeout: 120_000 });
+  await expect(page.getByRole('button', { name: 'Run', exact: true })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'Stop game', exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: '3 · Python', exact: true }).click();
+  const timedEditor = page.getByRole('textbox', { name: 'Python script', exact: true });
+  await timedEditor.press('ControlOrMeta+A');
+  await page.keyboard.insertText('from nitrogen import require\nassert require("si").Game is type(game)\ntimer = new_instance("silicon.Timer", "clock", game)\ntimer.ins.start()\nwarning("Timer running")\nprint("ticking")');
+  await page.getByRole('button', { name: 'Run', exact: true }).click();
+  await expect(page.locator('.console-line.warning p', { hasText: /^Timer running$/ })).toHaveCount(1, { timeout: 120_000 });
+  await expect(page.locator('.console-line.warning > span')).toContainText('WARN');
   await page.getByRole('button', { name: 'Pause game', exact: true }).click();
   await expect(page.locator('.runtime-status')).toContainText('paused');
   await page.getByRole('button', { name: 'Resume game', exact: true }).click();
   await expect(page.locator('.runtime-status')).toContainText('running');
   await page.getByRole('button', { name: 'Restart game', exact: true }).click();
-  await expect(page.locator('.console-line p', { hasText: /^hello$/ })).toHaveCount(2, { timeout: 120_000 });
+  await expect(page.locator('.console-line p', { hasText: /^ticking$/ })).toHaveCount(2, { timeout: 120_000 });
   await page.getByRole('button', { name: 'Stop game', exact: true }).click();
 
   await page.getByRole('button', { name: '3 · Python', exact: true }).click();
@@ -46,7 +55,8 @@ test('static site analyzes Python, runs Silicon, accepts console input, and inte
   await prompt.getByRole('button', { name: 'Submit', exact: true }).click();
   await expect(page.locator('.console-line p', { hasText: 'Created entity ID: friend | name: Nova' })).toBeVisible();
   await expect(prompt).toHaveCount(0);
-  await page.getByRole('button', { name: 'Restart game', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Run', exact: true })).toBeEnabled();
+  await page.getByRole('button', { name: 'Run', exact: true }).click();
   await expect(prompt).toContainText('New entity ID:', { timeout: 120_000 });
   await page.getByRole('button', { name: 'Stop game', exact: true }).click();
   await expect(prompt).toHaveCount(0);

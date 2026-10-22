@@ -190,7 +190,7 @@ test('unified connections execute lifecycle → script → script → component 
   );
   assert.deepEqual(validateProject(project, builtins()).filter(d => d.severity === 'error'), []);
   const restored = (await importAct(await exportAct(project))).project;
-  const result = spawnSync('python3', ['-c', `${exportPython(restored).replace('if __name__ == "__main__":', 'if False:')}\ng = build_game()\ng.start()\nassert g[g.actwright_components[${pythonLiteral(entity)}]].state.spawned\ng.stop()\n`], { encoding: 'utf-8', env: { ...process.env, PYTHONPATH: silicon } });
+  const result = spawnSync('python3', ['-c', `${exportPython(restored, { embeddedRuntime: true }).replace('if __name__ == "__main__":', 'if False:')}\ng = build_game()\ng.start()\nassert g[g.actwright_components[${pythonLiteral(entity)}]].state.spawned\ng.stop()\n`], { encoding: 'utf-8', env: { ...process.env, PYTHONPATH: silicon } });
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /CHAIN 7/);
 });

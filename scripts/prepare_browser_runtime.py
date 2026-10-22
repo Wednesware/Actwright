@@ -13,6 +13,7 @@ def prepare():
         path = ROOT / 'backend/app/analysis' / name
         sources[f'actwright_analysis/{name}'] = path.read_text()
     sources['actwright_browser.py'] = (ROOT / 'backend/app/runtime/browser.py').read_text()
+    sources['nitrogen.py'] = (ROOT / 'backend/app/runtime/browser_nitrogen.py').read_text()
     output = ROOT / 'frontend/public/python-runtime.json'
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps({'revision': REVISION, 'sources': sources}))

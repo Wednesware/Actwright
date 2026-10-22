@@ -20,7 +20,7 @@ function playSound(confirm = false): void {
       const tone = audio.createOscillator(), envelope = audio.createGain(), start = audio.currentTime;
       tone.type = 'sine'; tone.frequency.setValueAtTime(confirm ? 660 : 480, start);
       tone.frequency.exponentialRampToValueAtTime(confirm ? 880 : 350, start + 0.065);
-      envelope.gain.setValueAtTime(0, start); envelope.gain.linearRampToValueAtTime(0.24, start + 0.007);
+      envelope.gain.setValueAtTime(0, start); envelope.gain.linearRampToValueAtTime(0.7, start + 0.007);
       envelope.gain.exponentialRampToValueAtTime(0.001, start + 0.085);
       tone.connect(envelope); envelope.connect(gain); tone.start(start); tone.stop(start + 0.09);
       tone.onended = () => { tone.disconnect(); envelope.disconnect(); };
