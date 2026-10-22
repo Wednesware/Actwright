@@ -196,7 +196,8 @@ requires a preceding build, Chromium, and network access to the Pyodide CDN.
 
 ## Development
 
-Requires Node 22.18+ (native TypeScript stripping) and Python 3.12+.
+Requires Node 24+ for the test runner and native TypeScript stripping, and Python 3.12+.
+Building/running the editor also supports Node 22.18+.
 
 ```sh
 npm ci
